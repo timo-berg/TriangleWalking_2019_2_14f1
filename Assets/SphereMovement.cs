@@ -60,7 +60,6 @@ public class SphereMovement : Singleton<SphereMovement>
         //Stop the translation if there is no remaining distance
         if (remainingDistance <= 0.1f) {
             isTranslating = false;
-            renderer.material.color = new Color(0.5f,1,1);
         }
 
         if (isTranslating) {

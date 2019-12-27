@@ -5,10 +5,18 @@ using UnityEngine;
 public class ExperimentManager : Singleton<ExperimentManager>
 {
         float nearDistance = 10f;
+        GameObject sphere;
         
+        void Start() {
+            sphere = GameObject.Find("Sphere");
+        }
 
         void Update() {
-            //Debug.Log(isTaskFinished());
+            
+            updateSphereColor();
+            
+            
+            
         }
 
         bool isTaskFinished() {
@@ -16,8 +24,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
             bool sphereMoving = true;
 
             //Checks if the player is close to the sphere
-            Vector3 distance = PlayerMovement.Instance.getPlayerPosition() - SphereMovement.Instance.getSpherePosition();
-            if (distance.magnitude < nearDistance)
+            if (distancePlayerSphere() < nearDistance)
                 playerNearSphere = true;
 
             //Checks if the sphere is in motion
@@ -31,5 +38,32 @@ public class ExperimentManager : Singleton<ExperimentManager>
             } else {
                 return false;
             }
+        }
+
+        float distancePlayerSphere() {
+            Vector3 distance = PlayerMovement.Instance.getPlayerPosition() - SphereMovement.Instance.getSpherePosition();
+            return distance.magnitude;
+        }
+
+        void updateSphereColor() {
+            //Updates the sphere color based on the proximity of the player
+            //to the sphere
+            if (SphereMovement.Instance.isSphereTranslating()) {
+                float currentDistance = distancePlayerSphere();
+                sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
+            } else {
+                sphere.GetComponent<Renderer>().material.color = new Color(1,1,1);
+            }
+            
+        }
+        Color proximityColor(float currentDistance, float preferredDistance) {
+            //Returns red, if the player is really close or really far away
+            //Returns green, if the player is at the preferred distance
+            //Returns a gradient in between otherwise
+            currentDistance -= preferredDistance;
+            float x = Mathf.Abs(Mathf.Clamp(currentDistance/preferredDistance, -1, 1));
+            
+            Color color = new Color(2.0f * x, 2.0f * (1 - x), 0); 
+            return color;
         }
 }
