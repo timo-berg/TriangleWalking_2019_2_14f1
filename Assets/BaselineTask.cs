@@ -1,4 +1,6 @@
-﻿using System.Collections;
+﻿#if false
+
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +22,7 @@ public class BaselineTask : Singleton<BaselineTask>
                 waypoint newWaypoint = generateRandomWaypoint();
             }
 
-            if ()
+ 
 
             
 
@@ -44,3 +46,5 @@ public class BaselineTask : Singleton<BaselineTask>
             return randomWaypoint;
         }
 }
+
+#endif
