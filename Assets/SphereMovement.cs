@@ -15,7 +15,7 @@ public class SphereMovement : Singleton<SphereMovement>
     bool isTranslating = false;
     float remainingDistance = 0f;
     float totalDistance;
-    float translationSpeed = 0.5f;
+    float translationSpeed = 2f;
     Vector3 translationDirection;
 
         
@@ -74,7 +74,7 @@ public class SphereMovement : Singleton<SphereMovement>
         }
 
         //Get sine scaling factor
-        float scalingFactor = sineScaleFactor(remainingDistance, totalDistance);
+        float scalingFactor = MathHelper.sineScaleFactor(remainingDistance, totalDistance);
         //Debug.Log(scalingFactor);
         //Translation vector with scaled length
         Vector3 translationVector = translationDirection.normalized * (Time.deltaTime * scalingFactor *  translationSpeed);
@@ -94,7 +94,7 @@ public class SphereMovement : Singleton<SphereMovement>
             isRotating = false;
         }
         //Get sine scaling factor
-        float scalingFactor = sineScaleFactor(remainingAngle, totalAngle);
+        float scalingFactor = MathHelper.sineScaleFactor(remainingAngle, totalAngle);
         //Rotation increment
         float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
         // Spin the object around the Player.
@@ -118,13 +118,6 @@ public class SphereMovement : Singleton<SphereMovement>
         return position;
     }
 
-    float sineScaleFactor(float currentValue, float totalValue) {
-        //Returns the value of a sine curve between 1.5pi (minimum) and 3.5pi (next minimum)
-        //The factor is then scaled to be ranging from 0 to 2
-        //Returns 0 at the start and the end and 2 in the middle
-        float scaleFactor = Mathf.Sin(Mathf.PI * currentValue/totalValue) + 1.1f;
-        //return scaleFactor;
-        return 1;
-    }
+
 
 }

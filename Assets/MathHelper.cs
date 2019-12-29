@@ -27,23 +27,20 @@ public static class MathHelper
         return randomWaypoint;
     }
 
-    public static float generateRandomAngle() {
-        bool sign  = (Random.value > 0.5f);
-        float angle = Random.Range(10f, 90f);
-        if (!sign) {angle = -angle;}
-        return angle;
-    }
-
-    public static float generateRandomDistance() {
-        float distance = Random.Range(2f,5f);
-        return distance;
-    }
-
     public static bool proofWaypoint(float angle, float distance) {
         if (angle <= 180f && angle >= -180f && distance >= 2f) {
             return true;
         } else {
             return false;
         }
+    }
+
+    public static float sineScaleFactor(float currentValue, float totalValue) {
+        //Returns the value of a sine curve between 1.5pi (minimum) and 3.5pi (next minimum)
+        //The factor is then scaled to be ranging from 0 to 2
+        //Returns 0 at the start and the end and 2 in the middle
+        float scaleFactor = Mathf.Sin(Mathf.PI * currentValue/totalValue) + .3f;
+        //return scaleFactor;
+        return scaleFactor*2;
     }
 }
