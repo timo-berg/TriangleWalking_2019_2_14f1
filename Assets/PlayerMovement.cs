@@ -29,7 +29,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         }
 
         if (Input.GetKeyDown("up")) {
-            SphereMovement.Instance.setTranslation(10f);
+            SphereMovement.Instance.setTranslation(4f);
         }
        
 
@@ -45,7 +45,9 @@ public class PlayerMovement : Singleton<PlayerMovement>
     }
 
     public Vector3 getPlayerPosition() {
-        return transform.position;
+        Vector3 position = transform.position;
+        position.y = 0f;
+        return position;
     }
 
 }

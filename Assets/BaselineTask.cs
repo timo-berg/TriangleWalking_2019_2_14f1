@@ -1,50 +1,62 @@
-﻿#if false
-
-using System.Collections;
+﻿using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class BaselineTask : Singleton<BaselineTask>
 {
-
-        struct waypoint {
-            float distance;
-            float angle;
-            bool rotateRight;
-        }
-
         int remainingWaypoints;
-        bool taskAtHand = false;
 
-        void Update() {
-            //Start a new waypoint task if the previous task is finished and there are still waypoints left
-            if (ExperimentManager.Instance.isTaskFinished() && remainingWaypoints > 0 && !taskAtHand) {
-                waypoint newWaypoint = generateRandomWaypoint();
-            }
-
- 
-
-            
-
+        public void initiateBaseline(int numberWaypoints) {      
+            remainingWaypoints = numberWaypoints; 
+            StartCoroutine(executeBaseline());
         }
 
-        public void createBaseline(int numberWaypoints) {      
-            remainingWaypoints = numberWaypoints;    
-            for (int waypointCounter = 0; waypointCounter < numberWaypoints; waypointCounter++) {
-                waypoint newWaypoint = generateRandomWaypoint();
-                waypointList.Add(newWaypoint);
+
+
+        IEnumerator executeBaseline() {
+            while(remainingWaypoints > 0) {
+                //Create a waypoint
+                /*
+                float rotationAngle = MathHelper.generateRandomAngle();
+                float translationDistance = MathHelper.generateRandomDistance();
+                MathHelper.proofWaypoint(rotationAngle,translationDistance);
+                Debug.Log(rotationAngle);
+                Debug.Log(translationDistance);
+                */
+                bool waypointSecure = false;
+                float rotationAngle = 0f;
+                float translationDistance = 0f;
+                Vector3 waypoint;
+
+                do {
+                waypoint = MathHelper.generateRandomWaypoint();
+                rotationAngle = MathHelper.getAngle(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), waypoint);
+                translationDistance = MathHelper.getDistance(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), waypoint);
+                waypointSecure = MathHelper.proofWaypoint(rotationAngle, translationDistance);
+                Debug.Log(waypointSecure);
+                } while (!waypointSecure);
+
+                Debug.DrawLine(PlayerMovement.Instance.getPlayerPosition(),waypoint, Color.green, 10f);
+                Debug.Log(rotationAngle);
+                Debug.Log(translationDistance);
+                //Set rotation parameters and start rotation
+                bool rotateRight = rotationAngle >= 0;
+                SphereMovement.Instance.setRotation(Mathf.Abs(rotationAngle), rotateRight);
+                //Wait until rotation is completed
+                yield return new WaitWhile(() => SphereMovement.Instance.isSphereRotating());
+                Debug.Log("Rotation done!");
+
+                //Translate to the waypoint
+                SphereMovement.Instance.setTranslation(translationDistance);
+                //Debug.Log(String.Format("Translate {0} meter", translationDistance));
+                yield return new WaitWhile(() => SphereMovement.Instance.isSphereTranslating());
+                Debug.Log("Translation done!");
+
+                //Repeat until no waypoints are left
+                yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
+                Debug.Log("Waypoint reached!");
+                remainingWaypoints -= 1;
             }
-        }
-
-        waypoint generateRandomWaypoint() {        
-            float distance = Random.Range(10f, 20f);  
-            float angle = Random.Range(0f, 180f);       
-            bool rotateRight = rand.Next(2) == 0;
-
-            waypoint randomWaypoint = new waypoint(distance, angle, rotateRight);
-
-            return randomWaypoint;
         }
 }
-
-#endif

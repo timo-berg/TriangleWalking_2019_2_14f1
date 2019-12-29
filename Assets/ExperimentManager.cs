@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
-        float nearDistance = 10f;
+        float nearDistance = 1.5f;
         GameObject sphere;
         
         void Start() {
@@ -12,14 +12,13 @@ public class ExperimentManager : Singleton<ExperimentManager>
         }
 
         void Update() {
-            
             updateSphereColor();
-            
+            //Debug.Log(distancePlayerSphere());
             
             
         }
 
-        bool isTaskFinished() {
+        public bool isTaskFinished() {
             bool playerNearSphere = false;
             bool sphereMoving = true;
 
@@ -40,7 +39,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
             }
         }
 
-        float distancePlayerSphere() {
+        public float distancePlayerSphere() {
             Vector3 distance = PlayerMovement.Instance.getPlayerPosition() - SphereMovement.Instance.getSpherePosition();
             return distance.magnitude;
         }
@@ -48,12 +47,15 @@ public class ExperimentManager : Singleton<ExperimentManager>
         void updateSphereColor() {
             //Updates the sphere color based on the proximity of the player
             //to the sphere
-            if (SphereMovement.Instance.isSphereTranslating()) {
+            /* if (SphereMovement.Instance.isSphereTranslating()) {
                 float currentDistance = distancePlayerSphere();
                 sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
             } else {
                 sphere.GetComponent<Renderer>().material.color = new Color(1,1,1);
             }
+            */
+            float currentDistance = distancePlayerSphere();
+            sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
             
         }
         Color proximityColor(float currentDistance, float preferredDistance) {

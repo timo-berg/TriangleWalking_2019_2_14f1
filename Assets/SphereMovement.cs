@@ -5,17 +5,17 @@ using UnityEngine;
 public class SphereMovement : Singleton<SphereMovement>
 {
     //Rotation variables
-    bool isRotating = true;
+    bool isRotating = false;
     float remainingAngle = 0f;
     float totalAngle;
     bool rightRotation = false;
     float angularSpeed = 10f;
 
     //Translation variables
-    bool isTranslating = true;
+    bool isTranslating = false;
     float remainingDistance = 0f;
     float totalDistance;
-    float translationSpeed = 4f;
+    float translationSpeed = 0.5f;
     Vector3 translationDirection;
 
         
@@ -24,8 +24,14 @@ public class SphereMovement : Singleton<SphereMovement>
         //Call rotation and translation in every update.
         //If the sphere actually translates or rotates depends on the
         //variables isTranslating and isRotating
-        rotateSphere();
-        translateSphere();
+        if (isRotating) {
+            rotateSphere();
+        }
+
+        if (isTranslating) {
+            translateSphere();
+        }
+        
 
     }
 
@@ -40,6 +46,11 @@ public class SphereMovement : Singleton<SphereMovement>
         rightRotation = rotateRight;
         remainingAngle = angle;
         totalAngle = angle;
+        if (!rightRotation) {
+            angularSpeed = -1 * angularSpeed;
+        } else {
+            angularSpeed = Mathf.Abs(angularSpeed);
+        }
     }
 
     public void setTranslation(float distance) {
@@ -51,7 +62,7 @@ public class SphereMovement : Singleton<SphereMovement>
         isTranslating = true;
         remainingDistance = distance;
         totalDistance = distance;
-        translationDirection = transform.position - PlayerMovement.Instance.getPlayerPosition();
+        translationDirection = getSpherePosition() - PlayerMovement.Instance.getPlayerPosition();
     }
 
     void translateSphere() {
@@ -62,16 +73,16 @@ public class SphereMovement : Singleton<SphereMovement>
             isTranslating = false;
         }
 
-        if (isTranslating) {
-            //Get sine scaling factor
-            float scalingFactor = sineScaleFactor(remainingDistance, totalDistance);
-            //Translation vector with scaled length
-            Vector3 translationVector = translationDirection.normalized * Time.deltaTime * scalingFactor * translationSpeed;
-            //Move sphere forward
-            transform.Translate(translationVector);
-            //Decrement by the travelled distance
-            remainingDistance -= Time.deltaTime * translationSpeed;
-        }
+        //Get sine scaling factor
+        float scalingFactor = sineScaleFactor(remainingDistance, totalDistance);
+        //Debug.Log(scalingFactor);
+        //Translation vector with scaled length
+        Vector3 translationVector = translationDirection.normalized * (Time.deltaTime * scalingFactor *  translationSpeed);
+        //Move sphere forward
+        transform.Translate(translationVector, Space.World);
+        //Decrement by the travelled distance
+        remainingDistance -= Time.deltaTime * translationSpeed * scalingFactor;
+
         
     }
 
@@ -79,29 +90,20 @@ public class SphereMovement : Singleton<SphereMovement>
         //Rotates the sphere at a fixed distance around the player as long as there is a remaining angle left
 
         //Stop the rotation if there is no remaining angle
-        if (remainingAngle <= 0.1f) {
+        if (Mathf.Abs(remainingAngle) <= 0.1f) {
             isRotating = false;
         }
-           
-        if (isRotating) {
-            //Set the rotation direction
-            if (!rightRotation) {
-                angularSpeed = -1 * angularSpeed;
-            }
-            //Get sine scaling factor
-            float scalingFactor = sineScaleFactor(remainingAngle, totalAngle);
-            //Rotation increment
-            float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
-            // Spin the object around the Player.
-            transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
-            
-            //Decrement by the travelled rotation
-            if (rightRotation) {
-                remainingAngle -= Time.deltaTime * angularSpeed;
-            } else {
-                remainingAngle += Time.deltaTime * angularSpeed;
-            }
-        }
+        //Get sine scaling factor
+        float scalingFactor = sineScaleFactor(remainingAngle, totalAngle);
+        //Rotation increment
+        float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
+        // Spin the object around the Player.
+        transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
+        
+        //Decrement by the travelled rotation
+        remainingAngle -= Mathf.Abs(roationIncrement);
+
+        
     }
     public bool isSphereRotating() {
         return isRotating;
@@ -111,15 +113,18 @@ public class SphereMovement : Singleton<SphereMovement>
     }
 
     public Vector3 getSpherePosition() {
-        return transform.position;
+        Vector3 position = transform.position;
+        position.y = 0f;
+        return position;
     }
 
     float sineScaleFactor(float currentValue, float totalValue) {
         //Returns the value of a sine curve between 1.5pi (minimum) and 3.5pi (next minimum)
         //The factor is then scaled to be ranging from 0 to 2
         //Returns 0 at the start and the end and 2 in the middle
-        float scaleFactor = Mathf.Sin(1.5f*Mathf.PI + 2*Mathf.PI * currentValue/totalValue) + 1;
-        return scaleFactor;
+        float scaleFactor = Mathf.Sin(Mathf.PI * currentValue/totalValue) + 1.1f;
+        //return scaleFactor;
+        return 1;
     }
 
 }
