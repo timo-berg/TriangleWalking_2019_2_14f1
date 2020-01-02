@@ -44,10 +44,10 @@ public class SphereMovement : Singleton<SphereMovement>
 
         isRotating = true;
         rightRotation = rotateRight;
-        remainingAngle = angle;
-        totalAngle = angle;
+        remainingAngle = Mathf.Abs(angle);
+        totalAngle = Mathf.Abs(angle);
         if (!rightRotation) {
-            angularSpeed = -1 * angularSpeed;
+            angularSpeed = -1 * Mathf.Abs(angularSpeed);
         } else {
             angularSpeed = Mathf.Abs(angularSpeed);
         }
@@ -90,7 +90,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Rotates the sphere at a fixed distance around the player as long as there is a remaining angle left
 
         //Stop the rotation if there is no remaining angle
-        if (Mathf.Abs(remainingAngle) <= 0.1f) {
+        if (remainingAngle <= 0.1f) {
             isRotating = false;
         }
         //Get sine scaling factor

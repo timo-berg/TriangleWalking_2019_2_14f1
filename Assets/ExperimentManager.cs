@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
-        float nearDistance = 1.5f;
+        public float nearDistance = 1.5f;
         GameObject sphere;
         
         void Start() {

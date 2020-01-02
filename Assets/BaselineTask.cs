@@ -31,7 +31,6 @@ public class BaselineTask : Singleton<BaselineTask>
                 waypointSecure = MathHelper.proofWaypoint(rotationAngle, translationDistance);
                 } while (!waypointSecure);
 
-                Debug.Log(waypoint);
                 //Set rotation parameters and start rotation
                 bool rotateRight = rotationAngle >= 0;
                 SphereMovement.Instance.setRotation(Mathf.Abs(rotationAngle), rotateRight);
