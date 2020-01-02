@@ -28,40 +28,50 @@ public class TriangleTask : Singleton<TriangleTask>
         angle = angles[angleID];
         secondDistance = distances[secondDistanceID];
         if (angle < 0) { anchorPoint = anchorPoints[0]; } else { anchorPoint = anchorPoints[1]; }
+        ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskStart;angle:{0};secondDistance:{1}",angle,secondDistance));
         //Start the tasks
         StartCoroutine(executeTriangle());
     }
 
     IEnumerator executeTriangle() {
         //Lead participant to anchor point
+        ExperimentManager.Instance.LogMarker(string.Format("event:walkToAnchor;waypoint:{0}",anchorPoint));
         StartCoroutine(walkToWaypoint(anchorPoint));
-        yield return new WaitWhile(() => isCoroutineRunning()); 
+        yield return new WaitWhile(() => isCoroutineRunning());
+        ExperimentManager.Instance.LogMarker("event:anchorReached");
 
         //Lead participant to the second point
         Vector3 firstWaypoint = anchorPoint + Vector3.right * firstDistance;
-        Debug.DrawLine(anchorPoint, firstWaypoint, Color.red, 20f);
+        ExperimentManager.Instance.LogMarker(string.Format("event:walkToFirstWaypoint;waypoint:{0}",firstWaypoint));
         StartCoroutine(walkToWaypoint(firstWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning()); 
+        ExperimentManager.Instance.LogMarker("event:firstWaypointReached");
 
         //Lead participant to the third point
         Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.right) * secondDistance;
-        Debug.DrawLine(firstWaypoint, secondWaypoint, Color.red, 20f);
+        ExperimentManager.Instance.LogMarker(string.Format("event:walkToSecondWaypoint;waypoint:{0}",secondWaypoint));
         StartCoroutine(walkToWaypoint(secondWaypoint));
-        yield return new WaitWhile(() => isCoroutineRunning()); 
+        yield return new WaitWhile(() => isCoroutineRunning());
+        ExperimentManager.Instance.LogMarker("event:secondWaypointReached");
         
-        //Let the participant point. Confirmation via click
+        //Let the participant point towards the origin. Confirmation via click
         Arrow.Instance.enablePointing(true);
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
         Arrow.Instance.enablePointing(false);
+        //Get the pointed direction
         pointingDirection = Arrow.Instance.getPointingDirection() - PlayerMovement.Instance.getPlayerPosition();
         pointingDirection.y = 0f;
         Debug.DrawRay(PlayerMovement.Instance.getPlayerPosition(), pointingDirection*20, Color.green, 20f);
-        yield return new WaitForSeconds(1);
+        yield return new WaitForSeconds(0.5f);
 
         //Let the participant walk. Confirmation via click
         SphereMovement.Instance.enablePushSphere(pointingDirection);
+        ExperimentManager.Instance.LogMarker("event:walkToOriginStart");
         yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
         SphereMovement.Instance.disablePushSphere();
+        Vector3 finalPosition = PlayerMovement.Instance.getPlayerPosition();
+        ExperimentManager.Instance.LogMarker(string.Format("event:walkToOriginStop,finalPosition:{0}",finalPosition));
+        ExperimentManager.Instance.LogMarker("event:triangleTaskStop");
         triangleRunning = false;
     }
 
@@ -78,16 +88,14 @@ public class TriangleTask : Singleton<TriangleTask>
         SphereMovement.Instance.setRotation(Mathf.Abs(rotationAngle), rotateRight);
         //Wait until rotation is completed
         yield return new WaitWhile(() => SphereMovement.Instance.isSphereRotating());
-        Debug.Log("Rotation done!");
 
         //Translate to the waypoint
         SphereMovement.Instance.setTranslation(translationDistance);
         yield return new WaitWhile(() => SphereMovement.Instance.isSphereTranslating());
-        Debug.Log("Translation done!");
 
         //Wait until the participant is near the sphere
         yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-        Debug.Log("Waypoint reached!");
+
         coroutineRunning = false;
     }
     public bool isTriangleRunning() {

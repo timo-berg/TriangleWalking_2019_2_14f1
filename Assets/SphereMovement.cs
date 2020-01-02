@@ -9,20 +9,25 @@ public class SphereMovement : Singleton<SphereMovement>
     float remainingAngle = 0f;
     float totalAngle;
     bool rightRotation = false;
-    float angularSpeed = 20f;
+    public float angularSpeed { get; private set; }
 
     //Translation variables
     bool isTranslating = false;
     float remainingDistance = 0f;
     float totalDistance;
-    float translationSpeed = 3f;
+    public float translationSpeed { get; private set; }
     Vector3 translationDirection;
 
     //Pushing variables
     Vector3 pushAxis;
     bool isPushing = false;
+    float sphereHeight = 1.5f;
 
-        
+    protected override void Awake() {
+        base.Awake();
+        angularSpeed = 20f;
+        translationSpeed = 3f;
+    }
     void Update()
     {
         //Call rotation and translation in every update.
@@ -50,15 +55,20 @@ public class SphereMovement : Singleton<SphereMovement>
         //angle:        angle that is to be rotated
         //rotateRight:  true for clockwise rotation, false for counterclockwise rotation
 
+        string direction;
         isRotating = true;
         rightRotation = rotateRight;
         remainingAngle = Mathf.Abs(angle);
         totalAngle = Mathf.Abs(angle);
         if (!rightRotation) {
             angularSpeed = -1 * Mathf.Abs(angularSpeed);
+            direction = "left";
         } else {
             angularSpeed = Mathf.Abs(angularSpeed);
+            direction = "right";
         }
+        
+        ExperimentManager.Instance.LogMarker(string.Format("event:rotationStart;angle:{0}:direction:{1}", angle,direction));
     }
 
     public void setTranslation(float distance) {
@@ -71,6 +81,8 @@ public class SphereMovement : Singleton<SphereMovement>
         remainingDistance = distance;
         totalDistance = distance;
         translationDirection = getSpherePosition() - PlayerMovement.Instance.getPlayerPosition();
+
+        ExperimentManager.Instance.LogMarker(string.Format("event:translationStart;distance:{0}", distance));
     }
 
     void translateSphere() {
@@ -79,6 +91,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Stop the translation if there is no remaining distance
         if (remainingDistance <= 0.1f) {
             isTranslating = false;
+            ExperimentManager.Instance.LogMarker("event:translationStop");
         }
 
         //Get sine scaling factor
@@ -100,6 +113,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Stop the rotation if there is no remaining angle
         if (remainingAngle <= 0.1f) {
             isRotating = false;
+            ExperimentManager.Instance.LogMarker("event:rotationStop");
         }
         //Get sine scaling factor
         float scalingFactor = MathHelper.sineScaleFactor(remainingAngle, totalAngle);
@@ -109,9 +123,7 @@ public class SphereMovement : Singleton<SphereMovement>
         transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
         
         //Decrement by the travelled rotation
-        remainingAngle -= Mathf.Abs(roationIncrement);
-
-        
+        remainingAngle -= Mathf.Abs(roationIncrement);        
     }
     public bool isSphereRotating() {
         return isRotating;
@@ -129,8 +141,9 @@ public class SphereMovement : Singleton<SphereMovement>
     public void enablePushSphere(Vector3 axis) {
         pushAxis = axis;
         isPushing = true;
-        Debug.Log(axis);
-        transform.position = PlayerMovement.Instance.getPlayerPosition() + axis + new Vector3(0, 1.5f, 0);
+        transform.position = PlayerMovement.Instance.getPlayerPosition() + axis + new Vector3(0, sphereHeight, 0);
+
+        ExperimentManager.Instance.LogMarker(string.Format("event:spherePushStart;axis:{0}",axis));
     }
 
     void pushSphere() {
@@ -143,6 +156,7 @@ public class SphereMovement : Singleton<SphereMovement>
 
     public void disablePushSphere() {
         isPushing = false;
+        ExperimentManager.Instance.LogMarker("event:spherePushStop");
     }
 
 

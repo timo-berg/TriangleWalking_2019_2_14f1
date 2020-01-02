@@ -68,4 +68,14 @@ public class ExperimentManager : Singleton<ExperimentManager>
             Color color = new Color(2.0f * x, 2.0f * (1 - x), 0); 
             return color;
         }
+
+        public void LogMarker(string marker) {
+            if ( string.IsNullOrEmpty(marker) ) {
+                return;
+            }
+
+            // DEBUG
+            print("LSL marker out: " + marker);
+            Assets.LSL4Unity.Scripts.LSLMarkerStream.Instance.Write(marker, LSL.liblsl.local_clock());
+	}
 }

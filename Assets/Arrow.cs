@@ -38,6 +38,11 @@ public class Arrow : Singleton<Arrow>
     public void enablePointing(bool enable) {
         showArrow(enable);
         clipToCamera(enable);
+        if (enable) {
+            ExperimentManager.Instance.LogMarker("event:pointingStart");
+        } else {
+            ExperimentManager.Instance.LogMarker("event:pointingStop");
+        }
     }
 
     public Vector3 getPointingDirection() {
