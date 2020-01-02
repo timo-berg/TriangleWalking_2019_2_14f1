@@ -20,6 +20,7 @@ public class TriangleTask : Singleton<TriangleTask>
 
     Vector3[] anchorPoints = new [] { new Vector3(-4f,0f,-2.5f), new Vector3(-4f,0f,2.5f) };
     Vector3 anchorPoint;
+    Vector3 pointingDirection;
 
     public void initiateTriangle(int angleID, int secondDistanceID) {
         triangleRunning = true;
@@ -48,8 +49,19 @@ public class TriangleTask : Singleton<TriangleTask>
         StartCoroutine(walkToWaypoint(secondWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning()); 
         
-        //TODO: Let the participant point
-        //TODO: Let the participant walk
+        //Let the participant point. Confirmation via click
+        Arrow.Instance.enablePointing(true);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
+        Arrow.Instance.enablePointing(false);
+        pointingDirection = Arrow.Instance.getPointingDirection() - PlayerMovement.Instance.getPlayerPosition();
+        pointingDirection.y = 0f;
+        Debug.DrawRay(PlayerMovement.Instance.getPlayerPosition(), pointingDirection*20, Color.green, 20f);
+        yield return new WaitForSeconds(1);
+
+        //Let the participant walk. Confirmation via click
+        SphereMovement.Instance.enablePushSphere(pointingDirection);
+        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
+        SphereMovement.Instance.disablePushSphere();
         triangleRunning = false;
     }
 
@@ -78,18 +90,6 @@ public class TriangleTask : Singleton<TriangleTask>
         Debug.Log("Waypoint reached!");
         coroutineRunning = false;
     }
-
-    /*
-    IEnumerator pointToOrigin() {
-        //Display an arrow that rotates with the view of the camera
-        //Wait for mouse click
-        //
-    }
-
-    IEnumerator walkToOrigin() {
-
-    }
-    */
     public bool isTriangleRunning() {
         return triangleRunning;
     }

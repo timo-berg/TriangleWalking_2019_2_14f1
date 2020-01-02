@@ -9,14 +9,18 @@ public class SphereMovement : Singleton<SphereMovement>
     float remainingAngle = 0f;
     float totalAngle;
     bool rightRotation = false;
-    float angularSpeed = 10f;
+    float angularSpeed = 20f;
 
     //Translation variables
     bool isTranslating = false;
     float remainingDistance = 0f;
     float totalDistance;
-    float translationSpeed = 2f;
+    float translationSpeed = 3f;
     Vector3 translationDirection;
+
+    //Pushing variables
+    Vector3 pushAxis;
+    bool isPushing = false;
 
         
     void Update()
@@ -30,6 +34,10 @@ public class SphereMovement : Singleton<SphereMovement>
 
         if (isTranslating) {
             translateSphere();
+        }
+
+        if (isPushing) {
+            pushSphere();
         }
         
 
@@ -116,6 +124,25 @@ public class SphereMovement : Singleton<SphereMovement>
         Vector3 position = transform.position;
         position.y = 0f;
         return position;
+    }
+
+    public void enablePushSphere(Vector3 axis) {
+        pushAxis = axis;
+        isPushing = true;
+        Debug.Log(axis);
+        transform.position = PlayerMovement.Instance.getPlayerPosition() + axis + new Vector3(0, 1.5f, 0);
+    }
+
+    void pushSphere() {
+        if (ExperimentManager.Instance.distancePlayerSphere() < 2f) {
+            float pushAmount = 2f - ExperimentManager.Instance.distancePlayerSphere();
+            transform.Translate(pushAxis.normalized * pushAmount, Space.World);
+        }
+        
+    }
+
+    public void disablePushSphere() {
+        isPushing = false;
     }
 
 
