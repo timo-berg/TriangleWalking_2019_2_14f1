@@ -18,12 +18,12 @@ public class Arrow : Singleton<Arrow>
     {
         if (clippedToCamera) {
             //Clip arrow to the camera movement
-            transform.position = Camera.main.ScreenToWorldPoint( new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane + 3) );
+            transform.position = Camera.main.ScreenToWorldPoint( new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane + 1) );
             //Set the height of the arrow
             transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
             //Make the arrow face the participant
             transform.LookAt(cylinder.transform, Vector3.up);
-            transform.Rotate(90f, 0f, 0f, Space.Self);
+            transform.Rotate(110f, 180f, 0f, Space.Self);
         }
     }
 

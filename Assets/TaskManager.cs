@@ -22,13 +22,13 @@ public class TaskManager :  Singleton<TaskManager>
 
     IEnumerator taskQueue() {
         
-        BaselineTask.Instance.initiateBaseline(3);
+        //BaselineTask.Instance.initiateBaseline(3);
         yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
 
         TriangleTask.Instance.initiateTriangle(2, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
 
-        BaselineTask.Instance.initiateBaseline(3);
-        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+        //BaselineTask.Instance.initiateBaseline(3);
+        //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
     }
 }
