@@ -77,5 +77,10 @@ public class ExperimentManager : Singleton<ExperimentManager>
             // DEBUG
             print("LSL marker out: " + marker);
             Assets.LSL4Unity.Scripts.LSLMarkerStream.Instance.Write(marker, LSL.liblsl.local_clock());
-	}
+    	}
+
+        public void setStartParameters(string ID, string height = "1.6") {
+            participantID = ID;
+            participantHeight = height;
+        }
 }
