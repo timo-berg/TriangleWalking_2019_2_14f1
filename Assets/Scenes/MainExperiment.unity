@@ -704,7 +704,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleSource: {fileID: 1945453197}
-  StreamName: RigidBodyStream
+  StreamName: SphereTransfrom
+--- !u!114 &921717039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921717036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801a1b31b8e4fb748be9739910663f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSource: {fileID: 1230705098}
+  StreamName: PlayerTransform
 --- !u!1 &958412051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: b7b6d3f521a7f8247896b9c2966aed55,
@@ -944,17 +958,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 202a6e24b48d1684398409c47161adcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trackingOriginTransform: {fileID: 0}
-  hmdTransforms: []
-  hands: []
-  headCollider: {fileID: 0}
-  rigSteamVR: {fileID: 0}
-  rig2DFallback: {fileID: 0}
-  audioListener: {fileID: 0}
-  headsetOnHead:
-    actionPath: /actions/default/in/HeadsetOnHead
-    needsReinit: 0
-  allowToggleTo2D: 1
 --- !u!1 &1388267592
 GameObject:
   m_ObjectHideFlags: 0
@@ -1519,6 +1522,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nearDistance: 1.5
+  participantID: 0
 --- !u!1 &1945453193
 GameObject:
   m_ObjectHideFlags: 0

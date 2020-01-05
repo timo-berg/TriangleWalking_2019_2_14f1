@@ -24,7 +24,7 @@ public class StartButtonClick : MonoBehaviour
 
     public void LoadExperiment() {
         TMP_InputField IDInput = GameObject.Find("IDInput").GetComponent<TMP_InputField>();
-        string id = IDinput.text;
+        string id = IDInput.text;
         TMP_InputField HeightInput = GameObject.Find("HeightInput").GetComponent<TMP_InputField>();
         string height = HeightInput.text;
         

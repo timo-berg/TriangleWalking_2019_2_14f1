@@ -6,6 +6,8 @@ public class ExperimentManager : Singleton<ExperimentManager>
 {
         public float nearDistance = 1.5f;
         GameObject sphere;
+        public int participantID;
+        int participantHeight;
         
         void Start() {
             sphere = GameObject.Find("Sphere");
@@ -80,7 +82,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     	}
 
         public void setStartParameters(string ID, string height = "1.6") {
-            participantID = ID;
-            participantHeight = height;
+            participantID = int.Parse(ID);
+            participantHeight = int.Parse(height);
         }
 }
