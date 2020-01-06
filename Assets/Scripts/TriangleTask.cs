@@ -56,7 +56,7 @@ public class TriangleTask : Singleton<TriangleTask>
         
         //Let the participant point towards the origin. Confirmation via click
         Arrow.Instance.enablePointing(true);
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
+        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
         Arrow.Instance.enablePointing(false);
         //Get the pointed direction
         pointingDirection = Arrow.Instance.getPointingDirection() - PlayerMovement.Instance.getPlayerPosition();
@@ -67,7 +67,7 @@ public class TriangleTask : Singleton<TriangleTask>
         //Let the participant walk. Confirmation via click
         SphereMovement.Instance.enablePushSphere(pointingDirection);
         ExperimentManager.Instance.LogMarker("event:walkToOriginStart");
-        yield return new WaitUntil(() => Input.GetKeyDown(KeyCode.Mouse0));
+        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
         SphereMovement.Instance.disablePushSphere();
         Vector3 finalPosition = PlayerMovement.Instance.getPlayerPosition();
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToOriginStop,finalPosition:{0}",finalPosition));

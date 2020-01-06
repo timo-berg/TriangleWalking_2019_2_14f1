@@ -45,9 +45,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
     }
 
     public Vector3 getPlayerPosition() {
-        Vector3 position = transform.position;
-        position.y = 0f;
-        return position;
+        if (ExperimentManager.Instance.isVR) {
+            Vector3 VRposition = GameObject.Find("VRCamera").GetComponent<Transform>().position;
+            VRposition.y = 0f; 
+            return VRposition;
+        } else {
+            Vector3 position = transform.position;
+            position.y = 0f;
+            return position;
+        }
+
     }
 
 }
