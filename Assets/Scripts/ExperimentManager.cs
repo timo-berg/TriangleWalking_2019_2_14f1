@@ -1,17 +1,35 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
         public float nearDistance = 1.5f;
         GameObject sphere;
+        GameObject VRplayer;
+        GameObject DesktopPlayer;
+
         public int participantID;
         int participantHeight;
         
         void Start() {
             sphere = GameObject.Find("Sphere");
-        }
+
+            //Check the current game system
+            VRplayer = GameObject.Find("VRPlayer");
+            DesktopPlayer = GameObject.Find("DesktopPlayer");
+
+            if (XRSettings.enabled && XRSettings.isDeviceActive) {
+                VRplayer.SetActive(true);  
+                DesktopPlayer.SetActive(false);
+                Debug.Log("Using VR");
+            } else {
+                VRplayer.SetActive(false);  
+                DesktopPlayer.SetActive(true);  
+                Debug.Log("Using Desktop");
+            }
+	    }
 
         void Update() {
             updateSphereColor();
