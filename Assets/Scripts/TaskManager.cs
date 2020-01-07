@@ -36,11 +36,11 @@ public class TaskManager :  Singleton<TaskManager>
         //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
         //yield return new WaitUntil(() => getKeyDown());
         
-        TriangleTask.Instance.initiateTriangle(2, 2);
+        TriangleTask.Instance.initiateTriangle(6, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
 
-        //BaselineTask.Instance.initiateBaseline(3);
-        //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+        BaselineTask.Instance.initiateBaseline(3);
+        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
     }
 
     public bool getKeyDown() {

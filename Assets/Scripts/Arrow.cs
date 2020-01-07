@@ -9,13 +9,15 @@ public class Arrow : Singleton<Arrow>
     GameObject desktopPlayer;
     GameObject hand;
     GameObject VRplayer;
+    Camera desktopCamera;
 
     // Start is called before the first frame update
     void Start()
     {
         desktopPlayer = GameObject.Find("Cylinder");
-        hand = GameObject.Find("RighHand");
+        hand = GameObject.Find("RightHand");
         VRplayer = GameObject.Find("VRCamera");
+        desktopCamera = GameObject.Find("DesktopCamera").GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -23,7 +25,7 @@ public class Arrow : Singleton<Arrow>
     {
         if (clippedToCamera) {
             //Clip arrow to the camera movement
-            transform.position = Camera.main.ScreenToWorldPoint( new Vector3(Screen.width/2, Screen.height/2, Camera.main.nearClipPlane + 1) );
+            transform.position = desktopCamera.ScreenToWorldPoint( new Vector3(Screen.width/2, Screen.height/2, desktopCamera.nearClipPlane + 1) );
             //Set the height of the arrow
             transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
             //Make the arrow face the participant
@@ -33,7 +35,7 @@ public class Arrow : Singleton<Arrow>
             transform.position = hand.transform.position;
             transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
             transform.LookAt(VRplayer.transform, Vector3.up);
-            transform.Rotate(110f, 180f, 0f, Space.Self);
+            transform.Rotate(20f, 180f, 0f, Space.Self);
             
         }
     }

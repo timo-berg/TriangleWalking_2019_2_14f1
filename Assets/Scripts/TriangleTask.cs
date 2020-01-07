@@ -18,7 +18,7 @@ public class TriangleTask : Singleton<TriangleTask>
     
     
 
-    Vector3[] anchorPoints = new [] { new Vector3(-4f,0f,-2.5f), new Vector3(-4f,0f,2.5f) };
+    Vector3[] anchorPoints = new [] { new Vector3(-1.5f,0f,-4f), new Vector3(2.5f,0f,-4f) };
     Vector3 anchorPoint;
     Vector3 pointingDirection;
 
@@ -34,6 +34,7 @@ public class TriangleTask : Singleton<TriangleTask>
     }
 
     IEnumerator executeTriangle() {
+        /*
         //Lead participant to anchor point
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToAnchor;waypoint:{0}",anchorPoint));
         StartCoroutine(walkToWaypoint(anchorPoint));
@@ -41,19 +42,21 @@ public class TriangleTask : Singleton<TriangleTask>
         ExperimentManager.Instance.LogMarker("event:anchorReached");
 
         //Lead participant to the second point
-        Vector3 firstWaypoint = anchorPoint + Vector3.right * firstDistance;
+        Vector3 firstWaypoint = anchorPoint + Vector3.left * firstDistance;
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToFirstWaypoint;waypoint:{0}",firstWaypoint));
         StartCoroutine(walkToWaypoint(firstWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning()); 
         ExperimentManager.Instance.LogMarker("event:firstWaypointReached");
 
         //Lead participant to the third point
-        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.right) * secondDistance;
+        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.left) * secondDistance;
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToSecondWaypoint;waypoint:{0}",secondWaypoint));
         StartCoroutine(walkToWaypoint(secondWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning());
         ExperimentManager.Instance.LogMarker("event:secondWaypointReached");
-        
+        */
+
+        yield return new WaitForSeconds(1f);
         //Let the participant point towards the origin. Confirmation via click
         Arrow.Instance.enablePointing(true);
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());

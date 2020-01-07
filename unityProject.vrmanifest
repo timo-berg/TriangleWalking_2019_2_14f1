@@ -5,7 +5,7 @@
       "app_key": "application.generated.unity.trianglewalking_2018_4_13f1.exe",
       "launch_type": "url",
       "url": "steam://launch/",
-      "action_manifest_path": "C:\\Users\\timo\\Desktop\\TriangleWalking\\TriangleWalking_2019_2_14f1\\Assets\\StreamingAssets\\SteamVR\\actions.json",
+      "action_manifest_path": "C:\\Users\\timo\\Documents\\GitHub\\TriangleWalking_2019_2_14f1\\Assets\\StreamingAssets\\SteamVR\\actions.json",
       "strings": {
         "en_us": {
           "name": "TriangleWalking_2018_4_13f1 [Testing]"

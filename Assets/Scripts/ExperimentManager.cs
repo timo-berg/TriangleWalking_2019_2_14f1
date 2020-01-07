@@ -13,6 +13,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
 
     public int participantID;
     float participantHeight = 1.7f;
+    bool isVRMenu;
     
     void Start() {
         sphere = GameObject.Find("Sphere");
@@ -100,8 +101,10 @@ public class ExperimentManager : Singleton<ExperimentManager>
         Assets.LSL4Unity.Scripts.LSLMarkerStream.Instance.Write(marker, LSL.liblsl.local_clock());
     }
 
-    public void setStartParameters(string ID, string height = "1.6") {
-        participantID = int.Parse(ID);
-        participantHeight = float.Parse(height)/100f;
+    public void setStartParameters() {
+        //GameObject startManager = GameObject.Find("_StartButtonManager");
+        participantID = int.Parse(StartButtonClick.Instance.ID);
+        participantHeight = float.Parse(StartButtonClick.Instance.height)/100f;
+        isVRMenu = StartButtonClick.Instance.isVR;
     }
 }
