@@ -63,6 +63,7 @@ public class TriangleTask : Singleton<TriangleTask>
         pointingDirection.y = 0f;
         Debug.DrawRay(PlayerMovement.Instance.getPlayerPosition(), pointingDirection*20, Color.green, 20f);
         yield return new WaitForSeconds(0.5f);
+        
 
         //Let the participant walk. Confirmation via click
         SphereMovement.Instance.enablePushSphere(pointingDirection);

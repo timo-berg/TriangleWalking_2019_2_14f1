@@ -32,10 +32,9 @@ public class TaskManager :  Singleton<TaskManager>
         //Wait for user input
         yield return new WaitUntil(() => getKeyDown());
 
-        BaselineTask.Instance.initiateBaseline(3);
-        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
-
-        yield return new WaitUntil(() => getKeyDown());
+        //BaselineTask.Instance.initiateBaseline(3);
+        //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+        //yield return new WaitUntil(() => getKeyDown());
         
         TriangleTask.Instance.initiateTriangle(2, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
@@ -44,7 +43,7 @@ public class TaskManager :  Singleton<TaskManager>
         //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
     }
 
-    bool getKeyDown() {
+    public bool getKeyDown() {
         if (ExperimentManager.Instance.isVR) {
             return SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any);
         } else {

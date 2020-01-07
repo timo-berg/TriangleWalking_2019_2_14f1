@@ -5,12 +5,17 @@ using UnityEngine;
 public class Arrow : Singleton<Arrow>
 {
     bool clippedToCamera = false;
-    GameObject cylinder;
+    bool clippedToController= false;
+    GameObject desktopPlayer;
+    GameObject hand;
+    GameObject VRplayer;
 
     // Start is called before the first frame update
     void Start()
     {
-        cylinder = GameObject.Find("Cylinder");
+        desktopPlayer = GameObject.Find("Cylinder");
+        hand = GameObject.Find("RighHand");
+        VRplayer = GameObject.Find("VRCamera");
     }
 
     // Update is called once per frame
@@ -22,8 +27,14 @@ public class Arrow : Singleton<Arrow>
             //Set the height of the arrow
             transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
             //Make the arrow face the participant
-            transform.LookAt(cylinder.transform, Vector3.up);
+            transform.LookAt(desktopPlayer.transform, Vector3.up);
             transform.Rotate(110f, 180f, 0f, Space.Self);
+        } else if (clippedToController) {
+            transform.position = hand.transform.position;
+            transform.position = new Vector3(transform.position.x, 0.5f, transform.position.z);
+            transform.LookAt(VRplayer.transform, Vector3.up);
+            transform.Rotate(110f, 180f, 0f, Space.Self);
+            
         }
     }
 
@@ -31,13 +42,14 @@ public class Arrow : Singleton<Arrow>
         GetComponent<Renderer>().enabled = show;
     }
 
-    void clipToCamera(bool clipToCamera) {
-        clippedToCamera = clipToCamera;
-    }
-
     public void enablePointing(bool enable) {
         showArrow(enable);
-        clipToCamera(enable);
+        if (ExperimentManager.Instance.isVR) {
+            clippedToController = enable;
+        } else {
+            clippedToCamera = enable;
+        }
+        
         if (enable) {
             ExperimentManager.Instance.LogMarker("event:pointingStart");
         } else {
