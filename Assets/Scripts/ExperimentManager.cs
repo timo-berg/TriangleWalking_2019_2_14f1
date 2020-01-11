@@ -2,10 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR;
+using System;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
-    public float nearDistance = 1.5f;
+    public float nearDistance = 1f;
     GameObject sphere;
     GameObject VRplayer;
     GameObject DesktopPlayer;
@@ -22,6 +23,8 @@ public class ExperimentManager : Singleton<ExperimentManager>
         VRplayer = GameObject.Find("VRPlayer");
         DesktopPlayer = GameObject.Find("DesktopPlayer");
 
+        UnityEngine.XR.XRSettings.enabled = false;
+
         if (XRSettings.enabled && XRSettings.isDeviceActive) {
             VRplayer.SetActive(true);  
             DesktopPlayer.SetActive(false);
@@ -35,9 +38,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     }
 
     void Update() {
-        updateSphereColor();
-                    
-        
+        updateSphereColor();        
     }
 
     public bool isTaskFinished() {
@@ -69,13 +70,6 @@ public class ExperimentManager : Singleton<ExperimentManager>
     void updateSphereColor() {
         //Updates the sphere color based on the proximity of the player
         //to the sphere
-        /* if (SphereMovement.Instance.isSphereTranslating()) {
-            float currentDistance = distancePlayerSphere();
-            sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
-        } else {
-            sphere.GetComponent<Renderer>().material.color = new Color(1,1,1);
-        }
-        */
         float currentDistance = distancePlayerSphere();
         sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
         
@@ -84,9 +78,8 @@ public class ExperimentManager : Singleton<ExperimentManager>
         //Returns red, if the player is really close or really far away
         //Returns green, if the player is at the preferred distance
         //Returns a gradient in between otherwise
-        currentDistance -= preferredDistance;
-        float x = Mathf.Abs(Mathf.Clamp(currentDistance/preferredDistance, -1, 1));
         
+        float x = 5f*Mathf.Pow(currentDistance-preferredDistance,2);
         Color color = new Color(2.0f * x, 2.0f * (1 - x), 0); 
         return color;
     }

@@ -32,6 +32,7 @@ public class BaselineTask : Singleton<BaselineTask>
                 waypointSecure = MathHelper.proofWaypoint(rotationAngle, translationDistance);
                 } while (!waypointSecure);
 
+                Debug.DrawLine(PlayerMovement.Instance.getPlayerPosition(), waypoint, Color.blue, 3f);
                 ExperimentManager.Instance.LogMarker(string.Format("event:baselineWaypoint;waypoint:{0}",waypoint));
                 //Set rotation parameters and start rotation
                 bool rotateRight = rotationAngle >= 0;

@@ -14,11 +14,11 @@ public class TriangleTask : Singleton<TriangleTask>
     float firstDistance = 4f;
     float secondDistance;
     //TODO: decide on distances
-    float[] distances = {3f, 4f, 5f};
+    float[] distances = {3f, 3.5f, 4f};
     
     
 
-    Vector3[] anchorPoints = new [] { new Vector3(-1.5f,0f,-4f), new Vector3(2.5f,0f,-4f) };
+    Vector3[] anchorPoints = new [] { new Vector3(-1.5f,0f,-5f), new Vector3(2f,0f,-5f) };
     Vector3 anchorPoint;
     Vector3 pointingDirection;
 
@@ -27,34 +27,43 @@ public class TriangleTask : Singleton<TriangleTask>
         //Set triangle parameters
         angle = angles[angleID];
         secondDistance = distances[secondDistanceID];
-        if (angle < 0) { anchorPoint = anchorPoints[0]; } else { anchorPoint = anchorPoints[1]; }
+        if (angle > 0) { anchorPoint = anchorPoints[0]; } else { anchorPoint = anchorPoints[1]; }
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskStart;angle:{0};secondDistance:{1}",angle,secondDistance));
         //Start the tasks
         StartCoroutine(executeTriangle());
     }
 
     IEnumerator executeTriangle() {
-        /*
+        
         //Lead participant to anchor point
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToAnchor;waypoint:{0}",anchorPoint));
         StartCoroutine(walkToWaypoint(anchorPoint));
+
+        Debug.DrawLine(PlayerMovement.Instance.getPlayerPosition(), anchorPoint, Color.green, 60f);
+
         yield return new WaitWhile(() => isCoroutineRunning());
         ExperimentManager.Instance.LogMarker("event:anchorReached");
 
         //Lead participant to the second point
-        Vector3 firstWaypoint = anchorPoint + Vector3.left * firstDistance;
+        Vector3 firstWaypoint = anchorPoint + Vector3.forward * firstDistance;
+
+        Debug.DrawLine(anchorPoint, firstWaypoint, Color.blue, 60f);
+        
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToFirstWaypoint;waypoint:{0}",firstWaypoint));
         StartCoroutine(walkToWaypoint(firstWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning()); 
         ExperimentManager.Instance.LogMarker("event:firstWaypointReached");
 
         //Lead participant to the third point
-        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.left) * secondDistance;
+        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.forward) * secondDistance;
+        
+        Debug.DrawLine(firstWaypoint, secondWaypoint, Color.red, 60f);
+        
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToSecondWaypoint;waypoint:{0}",secondWaypoint));
         StartCoroutine(walkToWaypoint(secondWaypoint));
         yield return new WaitWhile(() => isCoroutineRunning());
         ExperimentManager.Instance.LogMarker("event:secondWaypointReached");
-        */
+        
 
         yield return new WaitForSeconds(1f);
         //Let the participant point towards the origin. Confirmation via click
@@ -81,6 +90,8 @@ public class TriangleTask : Singleton<TriangleTask>
 
     IEnumerator walkToWaypoint(Vector3 waypoint) {
         coroutineRunning = true;
+
+        
         //Lead the participant to the waypoint 
         //Calculate rotation parameters
         float rotationAngle = 0f;

@@ -26,7 +26,7 @@ public class SphereMovement : Singleton<SphereMovement>
     protected override void Awake() {
         base.Awake();
         angularSpeed = 15f;
-        translationSpeed = 0.3f;
+        translationSpeed = 3f; //0.3f;
     }
     void Update()
     {
@@ -88,12 +88,6 @@ public class SphereMovement : Singleton<SphereMovement>
     void translateSphere() {
         //Translates the sphere forward as long as there is remaining distance left
 
-        //Stop the translation if there is no remaining distance
-        if (remainingDistance <= 0.1f) {
-            isTranslating = false;
-            ExperimentManager.Instance.LogMarker("event:translationStop");
-        }
-
         //Get sine scaling factor
         float scalingFactor = MathHelper.sineScaleFactor(remainingDistance, totalDistance);
         //Debug.Log(scalingFactor);
@@ -103,31 +97,36 @@ public class SphereMovement : Singleton<SphereMovement>
         transform.Translate(translationVector, Space.World);
         //Decrement by the travelled distance
         remainingDistance -= Time.deltaTime * translationSpeed * scalingFactor;
-
+        //Stop the translation if there is no remaining distance
+        if (remainingDistance <= 0.1f) {
+            isTranslating = false;
+            ExperimentManager.Instance.LogMarker("event:translationStop");
+        }
         
     }
 
     void rotateSphere(){
         //Rotates the sphere at a fixed distance around the player as long as there is a remaining angle left
 
-        //Stop the rotation if there is no remaining angle
-        if (remainingAngle <= 0.1f) {
-            isRotating = false;
-            ExperimentManager.Instance.LogMarker("event:rotationStop");
-        }
         //Get sine scaling factor
         float scalingFactor = MathHelper.sineScaleFactor(remainingAngle, totalAngle);
         //Rotation increment
         float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
         // Spin the object around the Player.
         transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
-        
         //Decrement by the travelled rotation
-        remainingAngle -= Mathf.Abs(roationIncrement);        
+        remainingAngle -= Mathf.Abs(roationIncrement);  
+        //Stop the rotation if there is no remaining angle
+        if (Mathf.Abs(remainingAngle) <= 0.1f) {
+            isRotating = false;
+            ExperimentManager.Instance.LogMarker("event:rotationStop");
+        }      
     }
+
     public bool isSphereRotating() {
         return isRotating;
     }
+    
     public bool isSphereTranslating() {
         return isTranslating;
     }
@@ -141,14 +140,14 @@ public class SphereMovement : Singleton<SphereMovement>
     public void enablePushSphere(Vector3 axis) {
         pushAxis = axis;
         isPushing = true;
-        transform.position = PlayerMovement.Instance.getPlayerPosition() + axis + new Vector3(0, sphereHeight, 0);
+        transform.position = PlayerMovement.Instance.getPlayerPosition() + pushAxis.normalized + new Vector3(0, sphereHeight, 0);
 
         ExperimentManager.Instance.LogMarker(string.Format("event:spherePushStart;axis:{0}",axis));
     }
 
     void pushSphere() {
-        if (ExperimentManager.Instance.distancePlayerSphere() < 2f) {
-            float pushAmount = 2f - ExperimentManager.Instance.distancePlayerSphere();
+        if (ExperimentManager.Instance.distancePlayerSphere() < ExperimentManager.Instance.nearDistance) {
+            float pushAmount = ExperimentManager.Instance.nearDistance - ExperimentManager.Instance.distancePlayerSphere();
             transform.Translate(pushAxis.normalized * pushAmount, Space.World);
         }
         
