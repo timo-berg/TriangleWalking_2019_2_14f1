@@ -28,7 +28,7 @@ public static class MathHelper
     }
 
     public static bool proofWaypoint(float angle, float distance) {
-        if (angle <= 180f && angle >= -180f && distance >= 2f) {
+        if (Mathf.Abs(angle) <= 180f && Mathf.Abs(angle) >= 10f && distance >= 2f) {
             return true;
         } else {
             return false;

@@ -3,13 +3,16 @@
 
 public class Follow : MonoBehaviour
 {
+	GameObject VRplayer;
+    Camera desktopCamera;
+	
 	#region fields
 
 		public Transform target;
 		public float positionSmooth = 0.02f;
 
 		Vector3 vrOffset = new Vector3(0, 0, 1.2f);
-		Vector3 desktopOffset = new Vector3(0, 0.5f, 2f);
+		Vector3 desktopOffset = new Vector3(0, 0, 1f);
 
 	#endregion
 
@@ -47,8 +50,17 @@ public class Follow : MonoBehaviour
 
 	void Start()
 	{
-		if ( target == null )
-			target = Camera.main.transform;
+		if ( target == null ) {
+			VRplayer = GameObject.Find("VRCamera");
+        	desktopCamera = GameObject.Find("DesktopCamera").GetComponent<Camera>();
+			
+			if (ExperimentManager.Instance.isVR) {
+				target = VRplayer.transform;
+			} else {
+				target = desktopCamera.transform;
+			}
+		}
+			
 	}
 
 }

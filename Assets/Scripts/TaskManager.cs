@@ -30,14 +30,16 @@ public class TaskManager :  Singleton<TaskManager>
     IEnumerator taskQueue() {
         
         //Wait for user input
+        HMDMessageManager.Instance.ShowMessage("Herzlich Willkommen! \n Zum Start bitte klicken.");
         yield return new WaitUntil(() => getKeyDown());
-
-        //BaselineTask.Instance.initiateBaseline(3);
-        //yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
-        //yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
         
         TriangleTask.Instance.initiateTriangle(0, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
+
+        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
 
         BaselineTask.Instance.initiateBaseline(3);
         yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());

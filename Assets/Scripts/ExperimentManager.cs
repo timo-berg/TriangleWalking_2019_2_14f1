@@ -78,8 +78,13 @@ public class ExperimentManager : Singleton<ExperimentManager>
         //Returns red, if the player is really close or really far away
         //Returns green, if the player is at the preferred distance
         //Returns a gradient in between otherwise
+        float x;
+        if (currentDistance < preferredDistance) {
+            x = 5f*Mathf.Pow(currentDistance-preferredDistance,2);
+        } else {
+            x = Mathf.Abs(currentDistance/preferredDistance-1);
+        }
         
-        float x = 5f*Mathf.Pow(currentDistance-preferredDistance,2);
         Color color = new Color(2.0f * x, 2.0f * (1 - x), 0); 
         return color;
     }
