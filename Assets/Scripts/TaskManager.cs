@@ -28,7 +28,6 @@ public class TaskManager :  Singleton<TaskManager>
     }
 
     IEnumerator taskQueue() {
-        
         //Wait for user input
         HMDMessageManager.Instance.ShowMessage("Herzlich Willkommen! \n Zum Start bitte klicken.");
         yield return new WaitUntil(() => getKeyDown());

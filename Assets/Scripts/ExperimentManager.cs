@@ -23,7 +23,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
         VRplayer = GameObject.Find("VRPlayer");
         DesktopPlayer = GameObject.Find("DesktopPlayer");
 
-        UnityEngine.XR.XRSettings.enabled = false;
+        UnityEngine.XR.XRSettings.enabled = true;
 
         if (XRSettings.enabled && XRSettings.isDeviceActive) {
             VRplayer.SetActive(true);  
