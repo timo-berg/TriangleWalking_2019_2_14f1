@@ -14,6 +14,8 @@ public class TaskManager :  Singleton<TaskManager>
         string marker = string.Format("event:experimentStart;angularSpeed:{0};translationSpeed:{1}", 
                                         SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed);
         ExperimentManager.Instance.LogMarker(marker);
+        marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
+                                        StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
         StartCoroutine(taskQueue());
 
         //controller.GetComponent<Hand>().Show();
@@ -32,6 +34,7 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.ShowMessage("Herzlich Willkommen! \n Zum Start bitte klicken.");
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
+        ExperimentManager.Instance.hideTrackers();
         
         TriangleTask.Instance.initiateTriangle(0, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());

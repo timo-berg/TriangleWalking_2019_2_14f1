@@ -27,7 +27,6 @@ public class StartButtonClick : Singleton<StartButtonClick>
 
     public void onToggle(){
         isVR = !isVR;
-        Debug.Log(isVR);
     }
 
     public void LoadExperiment() {
@@ -35,11 +34,14 @@ public class StartButtonClick : Singleton<StartButtonClick>
         ID = IDInput.text;
         TMP_InputField HeightInput = GameObject.Find("HeightInput").GetComponent<TMP_InputField>();
         height = HeightInput.text;
-        GameObject startManager = GameObject.Find("_StartButtonManager");
+        GameObject startManager = GameObject.Find("Managers");
         DontDestroyOnLoad (startManager);
         SceneManager.LoadScene("MainExperiment");
+        Debug.Log(isVR);
         if (isVR) {
             UnityEngine.XR.XRSettings.enabled = true;
+        } else {
+            UnityEngine.XR.XRSettings.enabled = false;
         }
         
     }

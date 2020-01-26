@@ -7,33 +7,37 @@ using System;
 public class ExperimentManager : Singleton<ExperimentManager>
 {
     public float nearDistance = 1f;
-    GameObject sphere;
-    GameObject VRplayer;
-    GameObject DesktopPlayer;
-    public bool isVR = false;
+    public GameObject sphere;
+    public GameObject VRplayer;
+    public GameObject DesktopPlayer;
+    public GameObject TrackerLeft;
+    public GameObject TrackerRight;
+    public GameObject TrackerTorso;
+    public bool isVR;
 
     public int participantID;
     float participantHeight = 1.7f;
-    bool isVRMenu;
     
+    protected override void Awake() {
+        base.Awake();
+        isVR = StartButtonClick.Instance.isVR;
+    }
     void Start() {
-        sphere = GameObject.Find("Sphere");
         sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
-        //Check the current game system
-        VRplayer = GameObject.Find("VRPlayer");
-        DesktopPlayer = GameObject.Find("DesktopPlayer");
+        
+        //UnityEngine.XR.XRSettings.enabled = true;
 
-        UnityEngine.XR.XRSettings.enabled = true;
-
-        if (XRSettings.enabled && XRSettings.isDeviceActive) {
+        if (XRSettings.enabled && XRSettings.isDeviceActive && isVR) {
             VRplayer.SetActive(true);  
             DesktopPlayer.SetActive(false);
             Debug.Log("Using VR");
-            isVR = true;
         } else {
             VRplayer.SetActive(false);  
-            DesktopPlayer.SetActive(true);  
+            DesktopPlayer.SetActive(true);
+            isVR = false;
+            UnityEngine.XR.XRSettings.enabled = false;
             Debug.Log("Using Desktop");
+
         }
     }
 
@@ -99,10 +103,10 @@ public class ExperimentManager : Singleton<ExperimentManager>
         Assets.LSL4Unity.Scripts.LSLMarkerStream.Instance.Write(marker, LSL.liblsl.local_clock());
     }
 
-    public void setStartParameters() {
-        //GameObject startManager = GameObject.Find("_StartButtonManager");
-        participantID = int.Parse(StartButtonClick.Instance.ID);
-        participantHeight = float.Parse(StartButtonClick.Instance.height)/100f;
-        isVRMenu = StartButtonClick.Instance.isVR;
+
+    public void hideTrackers() {
+            TrackerLeft.GetComponent<MeshRenderer>().enabled = false;
+            TrackerRight.GetComponent<MeshRenderer>().enabled = false;
+            TrackerTorso.GetComponent<MeshRenderer>().enabled = false;
     }
 }

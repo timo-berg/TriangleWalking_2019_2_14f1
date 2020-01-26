@@ -200,7 +200,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 5
+  index: 7
   origin: {fileID: 0}
 --- !u!23 &79644674
 MeshRenderer:
@@ -430,7 +430,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d37c2cf88f7c59f4c8cf5d3812568143, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  index: 7
+  index: 6
   origin: {fileID: 0}
 --- !u!23 &182002669
 MeshRenderer:
@@ -599,7 +599,7 @@ GameObject:
   - component: {fileID: 274730721}
   m_Layer: 0
   m_Name: DesktopCamera
-  m_TagString: Untagged
+  m_TagString: MainCamera
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -694,6 +694,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Player
       objectReference: {fileID: 0}
+    - target: {fileID: 125964, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: m_TagString
+      value: Untagged
+      objectReference: {fileID: 0}
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
@@ -737,6 +741,14 @@ PrefabInstance:
     - target: {fileID: 447954, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 11401046, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: renderModelPrefab
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 11450312, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+      propertyPath: renderModelPrefab
+      value: 
       objectReference: {fileID: 0}
     - target: {fileID: 11465950, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
       propertyPath: trackingOriginTransform
@@ -2397,7 +2409,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   nearDistance: 1
-  isVR: 1
+  sphere: {fileID: 1945453193}
+  VRplayer: {fileID: 1745705203}
+  DesktopPlayer: {fileID: 1230705096}
+  TrackerLeft: {fileID: 79644671}
+  TrackerRight: {fileID: 1004045957}
+  TrackerTorso: {fileID: 182002666}
+  isVR: 0
   participantID: 0
 --- !u!1 &1945453193
 GameObject:

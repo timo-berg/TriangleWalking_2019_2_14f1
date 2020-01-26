@@ -53,11 +53,14 @@ public class Follow : MonoBehaviour
 		if ( target == null ) {
 			VRplayer = GameObject.Find("VRCamera");
         	desktopCamera = GameObject.Find("DesktopCamera").GetComponent<Camera>();
+			Debug.Log(desktopCamera);
 			
 			if (ExperimentManager.Instance.isVR) {
 				target = VRplayer.transform;
+				Debug.Log("Bound to VR");
 			} else {
 				target = desktopCamera.transform;
+				Debug.Log("Bound to Desktop");
 			}
 		}
 			
