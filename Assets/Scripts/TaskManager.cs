@@ -36,7 +36,7 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.HideMessage();
         ExperimentManager.Instance.hideTrackers();
         
-        TriangleTask.Instance.initiateTriangle(0, 2);
+        TriangleTask.Instance.initiateTriangle(3, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
 
         HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");

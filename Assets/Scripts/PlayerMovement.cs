@@ -20,6 +20,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             controller.Move(move * speed * Time.deltaTime);
         }
 
+        /*
         if (Input.GetKeyDown("left")) {
             SphereMovement.Instance.setRotation(45f, false);
         }
@@ -31,6 +32,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
         if (Input.GetKeyDown("up")) {
             SphereMovement.Instance.setTranslation(4f);
         }
+        */
        
 
 

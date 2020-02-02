@@ -20,7 +20,7 @@ public static class MathHelper
 
     public static Vector3 generateRandomWaypoint() {        
         float xPosition = Random.Range(-2.5f, 3.5f);  
-        float zPosition = Random.Range(-6.5f, 6.5f);       
+        float zPosition = Random.Range(-5f, 8f);       
 
         Vector3 randomWaypoint = new Vector3(xPosition, 0f, zPosition);
 

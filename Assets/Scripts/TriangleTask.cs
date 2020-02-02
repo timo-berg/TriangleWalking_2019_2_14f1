@@ -18,8 +18,11 @@ public class TriangleTask : Singleton<TriangleTask>
     
     
 
-    Vector3[] anchorPoints = new [] { new Vector3(-1.5f,0f,-5f), new Vector3(2f,0f,-5f) };
+    Vector3[] anchorPoints = new [] { new Vector3(-0.5f,0f,1.5f), new Vector3(1.5f,0f,1.5f) };
+    Vector3[] firstWaypoints = new [] { new Vector3(3f,0f,3.5f), new Vector3(-2f,0f,-0.5f) };
     Vector3 anchorPoint;
+    Vector3 firstWaypoint;
+    Vector3 rotationVector;
     Vector3 pointingDirection;
 
     public void initiateTriangle(int angleID, int secondDistanceID) {
@@ -27,7 +30,14 @@ public class TriangleTask : Singleton<TriangleTask>
         //Set triangle parameters
         angle = angles[angleID];
         secondDistance = distances[secondDistanceID];
-        if (angle > 0) { anchorPoint = anchorPoints[0]; } else { anchorPoint = anchorPoints[1]; }
+        if (angle > 0) { 
+            anchorPoint = anchorPoints[0];
+            firstWaypoint = firstWaypoints[0];
+        } else { 
+            anchorPoint = anchorPoints[1];
+            firstWaypoint = firstWaypoints[1];
+        }
+        rotationVector = anchorPoint - firstWaypoint;
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskStart;angle:{0};secondDistance:{1}",angle,secondDistance));
         //Start the tasks
         StartCoroutine(executeTriangle());
@@ -45,8 +55,6 @@ public class TriangleTask : Singleton<TriangleTask>
         ExperimentManager.Instance.LogMarker("event:anchorReached");
 
         //Lead participant to the second point
-        Vector3 firstWaypoint = anchorPoint + Vector3.forward * firstDistance;
-
         Debug.DrawLine(anchorPoint, firstWaypoint, Color.blue, 60f);
         
         ExperimentManager.Instance.LogMarker(string.Format("event:walkToFirstWaypoint;waypoint:{0}",firstWaypoint));
@@ -55,7 +63,7 @@ public class TriangleTask : Singleton<TriangleTask>
         ExperimentManager.Instance.LogMarker("event:firstWaypointReached");
 
         //Lead participant to the third point
-        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, angle, 0f) * Vector3.forward) * secondDistance;
+        Vector3 secondWaypoint = firstWaypoint + (Quaternion.Euler(0f, Mathf.Abs(angle), 0f) * rotationVector.normalized) * secondDistance;
         
         Debug.DrawLine(firstWaypoint, secondWaypoint, Color.red, 60f);
         
