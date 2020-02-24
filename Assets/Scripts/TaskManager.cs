@@ -36,15 +36,50 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.HideMessage();
         ExperimentManager.Instance.hideTrackers();
         
+        //First Baseline
+        HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        BaselineTask.Instance.initiateBaseline(5);
+        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+
+        //First task
+        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
         TriangleTask.Instance.initiateTriangle(3, 2);
         yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
-
         HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
 
-        BaselineTask.Instance.initiateBaseline(3);
+        //Second Baseline
+        HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        BaselineTask.Instance.initiateBaseline(5);
         yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+
+        //Second task
+        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        TriangleTask.Instance.initiateTriangle(5, 2);
+        yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
+        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
+
+        //Third Baseline
+        HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        BaselineTask.Instance.initiateBaseline(5);
+        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
+
+        //Third task
+        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        TriangleTask.Instance.initiateTriangle(0, 2);
+        yield return new WaitWhile(() =>  TriangleTask.Instance.isTriangleRunning());
+        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
     }
 
     public bool getKeyDown() {
@@ -54,4 +89,6 @@ public class TaskManager :  Singleton<TaskManager>
             return Input.GetKeyDown(KeyCode.Mouse0);
         }
     }
+
+    
 }
