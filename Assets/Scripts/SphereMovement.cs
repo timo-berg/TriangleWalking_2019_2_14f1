@@ -23,10 +23,18 @@ public class SphereMovement : Singleton<SphereMovement>
     bool isPushing = false;
     float sphereHeight = 1.5f;
 
+    //Other
+    MeshRenderer meshRenderer;
+    bool isBaseline = true;
+
     protected override void Awake() {
         base.Awake();
         angularSpeed = 10f;
         translationSpeed = 0.3f; //0.3f;
+    }
+
+    void Start() {
+        meshRenderer = GetComponent<MeshRenderer>();
     }
     void Update()
     {
@@ -39,12 +47,7 @@ public class SphereMovement : Singleton<SphereMovement>
 
         if (isTranslating) {
             translateSphere();
-        }
-
-        if (isPushing) {
-            pushSphere();
-        }
-        
+        }       
 
     }
 
@@ -90,13 +93,14 @@ public class SphereMovement : Singleton<SphereMovement>
 
         //Get sine scaling factor
         float scalingFactor = MathHelper.sineScaleFactor(remainingDistance, totalDistance);
-        //Debug.Log(scalingFactor);
         //Translation vector with scaled length
         Vector3 translationVector = translationDirection.normalized * (Time.deltaTime * scalingFactor *  translationSpeed);
         //Move sphere forward
         transform.Translate(translationVector, Space.World);
         //Decrement by the travelled distance
         remainingDistance -= Time.deltaTime * translationSpeed * scalingFactor;
+
+        updateSphereColor(remainingDistance);
         //Stop the translation if there is no remaining distance
         if (remainingDistance <= 0.1f) {
             isTranslating = false;
@@ -115,7 +119,9 @@ public class SphereMovement : Singleton<SphereMovement>
         // Spin the object around the Player.
         transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
         //Decrement by the travelled rotation
-        remainingAngle -= Mathf.Abs(roationIncrement);  
+        remainingAngle -= Mathf.Abs(roationIncrement);
+        //Turn color slowly to red when remaining angle is below 30 deg
+        updateSphereColor(remainingAngle/30);
         //Stop the rotation if there is no remaining angle
         if (Mathf.Abs(remainingAngle) <= 0.1f) {
             isRotating = false;
@@ -137,27 +143,17 @@ public class SphereMovement : Singleton<SphereMovement>
         return position;
     }
 
-    public void enablePushSphere(Vector3 axis) {
-        pushAxis = axis;
-        isPushing = true;
-        transform.position = PlayerMovement.Instance.getPlayerPosition() + pushAxis.normalized + new Vector3(0, sphereHeight, 0);
 
-        ExperimentManager.Instance.LogMarker(string.Format("event:spherePushStart;axis:{0}",axis));
-    }
-
-    void pushSphere() {
-        if (ExperimentManager.Instance.distancePlayerSphere() < ExperimentManager.Instance.nearDistance) {
-            float pushAmount = ExperimentManager.Instance.nearDistance - ExperimentManager.Instance.distancePlayerSphere();
-            transform.Translate(pushAxis.normalized * pushAmount, Space.World);
+    void updateSphereColor(float remainingAmount) {
+        //Updates the sphere color based on the remaining travel amount
+        //Color transition starts at remaining amount of 1 and stops at 0
+        if (isBaseline) {
+            meshRenderer.material.color = new Color(2.0f * (1 - remainingAmount), 0, 2.0f * remainingAmount); 
+        } else {
+            meshRenderer.material.color = new Color(2.0f * (1 - remainingAmount), 2.0f * remainingAmount, 0); 
         }
         
+        
     }
-
-    public void disablePushSphere() {
-        isPushing = false;
-        ExperimentManager.Instance.LogMarker("event:spherePushStop");
-    }
-
-
 
 }

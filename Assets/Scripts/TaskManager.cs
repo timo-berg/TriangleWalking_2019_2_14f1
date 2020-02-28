@@ -14,8 +14,8 @@ public class TaskManager :  Singleton<TaskManager>
         string marker = string.Format("event:experimentStart;angularSpeed:{0};translationSpeed:{1}", 
                                         SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed);
         ExperimentManager.Instance.LogMarker(marker);
-        marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
-                                        StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
+        //marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
+        //                                StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
         StartCoroutine(taskQueue());
 
         //controller.GetComponent<Hand>().Show();
@@ -35,13 +35,6 @@ public class TaskManager :  Singleton<TaskManager>
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
         ExperimentManager.Instance.hideTrackers();
-        
-        //First Baseline
-        HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
-        BaselineTask.Instance.initiateBaseline(5);
-        yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
 
         //First task
         HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
@@ -57,7 +50,7 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
-        BaselineTask.Instance.initiateBaseline(5);
+        BaselineTask.Instance.initiateLongBaseline(5);
         yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
 
         //Second task
@@ -74,7 +67,7 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.ShowMessage("Desorientierungsphase! \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
-        BaselineTask.Instance.initiateBaseline(5);
+        BaselineTask.Instance.initiateLongBaseline(5);
         yield return new WaitWhile(() => BaselineTask.Instance.isBaselineRunning());
 
         //Third task

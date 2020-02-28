@@ -83,17 +83,7 @@ public class TriangleTask : Singleton<TriangleTask>
         pointingDirection.y = 0f;
         Debug.DrawRay(PlayerMovement.Instance.getPlayerPosition(), pointingDirection*20, Color.green, 20f);
         yield return new WaitForSeconds(0.5f);
-        
 
-        //Let the participant walk. Confirmation via click
-        SphereMovement.Instance.enablePushSphere(pointingDirection);
-        ExperimentManager.Instance.LogMarker("event:walkToOriginStart");
-        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        SphereMovement.Instance.disablePushSphere();
-        Vector3 finalPosition = PlayerMovement.Instance.getPlayerPosition();
-        ExperimentManager.Instance.LogMarker(string.Format("event:walkToOriginStop,finalPosition:{0}",finalPosition));
-        ExperimentManager.Instance.LogMarker("event:triangleTaskStop");
-        triangleRunning = false;
     }
 
     IEnumerator walkToWaypoint(Vector3 waypoint) {

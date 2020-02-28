@@ -6,7 +6,7 @@ using System;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
-    public float nearDistance = 1f;
+    public float nearDistance;
     public GameObject sphere;
     public GameObject VRplayer;
     public GameObject DesktopPlayer;
@@ -20,7 +20,8 @@ public class ExperimentManager : Singleton<ExperimentManager>
     
     protected override void Awake() {
         base.Awake();
-        isVR = StartButtonClick.Instance.isVR;
+        isVR = false;//StartButtonClick.Instance.isVR;
+        nearDistance = 2f;
     }
     void Start() {
         sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
@@ -39,10 +40,22 @@ public class ExperimentManager : Singleton<ExperimentManager>
             Debug.Log("Using Desktop");
 
         }
+
+        /*
+        float angle = 150f;
+        float distance = ConfigValues.secondDistances[1];
+        Vector3 homePoint = MathHelper.getHomePoint(angle);
+        Vector3 secondWaypoint = MathHelper.getSecondWaypoint(angle, distance);
+        Vector3 firstWaypoint = ConfigValues.anchorPoints[1];
+        Debug.Log(homePoint);
+        Debug.Log(firstWaypoint);
+        Debug.Log(secondWaypoint);
+        Debug.DrawLine(homePoint, firstWaypoint, Color.white, 20f);
+        Debug.DrawLine(firstWaypoint, secondWaypoint, Color.black, 20f);
+        */
     }
 
     void Update() {
-        updateSphereColor();        
     }
 
     public bool isTaskFinished() {
@@ -50,8 +63,9 @@ public class ExperimentManager : Singleton<ExperimentManager>
         bool sphereMoving = true;
 
         //Checks if the player is close to the sphere
-        if (distancePlayerSphere() < nearDistance)
+        if (distancePlayerSphere() < nearDistance) {
             playerNearSphere = true;
+        }
 
         //Checks if the sphere is in motion
         if (!SphereMovement.Instance.isSphereRotating() && !SphereMovement.Instance.isSphereTranslating()) {
@@ -69,28 +83,6 @@ public class ExperimentManager : Singleton<ExperimentManager>
     public float distancePlayerSphere() {
         Vector3 distance = PlayerMovement.Instance.getPlayerPosition() - SphereMovement.Instance.getSpherePosition();
         return distance.magnitude;
-    }
-
-    void updateSphereColor() {
-        //Updates the sphere color based on the proximity of the player
-        //to the sphere
-        float currentDistance = distancePlayerSphere();
-        sphere.GetComponent<Renderer>().material.color = proximityColor(currentDistance, nearDistance);
-        
-    }
-    Color proximityColor(float currentDistance, float preferredDistance) {
-        //Returns red, if the player is really close or really far away
-        //Returns green, if the player is at the preferred distance
-        //Returns a gradient in between otherwise
-        float x;
-        if (currentDistance < preferredDistance) {
-            x = 5f*Mathf.Pow(currentDistance-preferredDistance,2);
-        } else {
-            x = Mathf.Abs(currentDistance/preferredDistance-1);
-        }
-        
-        Color color = new Color(2.0f * x, 2.0f * (1 - x), 0); 
-        return color;
     }
 
     public void LogMarker(string marker) {

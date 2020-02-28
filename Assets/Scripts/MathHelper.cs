@@ -28,7 +28,7 @@ public static class MathHelper
     }
 
     public static bool proofWaypoint(float angle, float distance) {
-        if (Mathf.Abs(angle) <= 180f && Mathf.Abs(angle) >= 10f && distance >= 2f) {
+        if (Mathf.Abs(angle) <= 180f && Mathf.Abs(angle) >= 10f && distance >= 3f) {
             return true;
         } else {
             return false;
@@ -42,5 +42,54 @@ public static class MathHelper
         float scaleFactor = Mathf.Sin(Mathf.PI * currentValue/totalValue) + .3f;
         //return scaleFactor;
         return scaleFactor*2;
+    }
+
+    public static Vector3 getHomePoint(float angle) {
+        //Calculates home point. The anchor point of
+        //the triangle is the first waypoint and is
+        //fixed (one for pos and one for neg angles)
+        Vector3 home;
+        float firstDistance = ConfigValues.firstDistance;
+        float absAngleRad = Mathf.Abs(angle) * Mathf.Deg2Rad;
+
+
+        if(angle < 0) {
+            home = ConfigValues.anchorPoints[0] + new Vector3(
+                    -Mathf.Cos(absAngleRad/2f)*firstDistance,
+                    0, 
+                    -Mathf.Sin(absAngleRad/2f)*firstDistance);
+            return home;
+        } else {
+            home = ConfigValues.anchorPoints[1] + new Vector3(
+                    Mathf.Cos(absAngleRad/2f)*firstDistance,
+                    0, 
+                    Mathf.Sin(absAngleRad/2f)*firstDistance);
+
+            return home;
+        }
+    }
+
+    public static Vector3 getSecondWaypoint(float angle, float distance) {
+        //Calculates second waypoint. The anchor point of
+        //the triangle is the first waypoint and is
+        //fixed (one for pos and one for neg angles)
+        Vector3 secondWaypoint;
+        float absAngleRad = Mathf.Abs(angle) * Mathf.Deg2Rad;
+
+        if(angle < 0) {
+            secondWaypoint = ConfigValues.anchorPoints[0] + new Vector3(
+                    -Mathf.Cos(absAngleRad/2)*distance,
+                    0, 
+                    Mathf.Sin(absAngleRad/2)*distance);
+
+            return secondWaypoint;
+        } else {
+            secondWaypoint = ConfigValues.anchorPoints[1] + new Vector3(
+                    Mathf.Cos(absAngleRad/2)*distance,
+                    0, 
+                    -Mathf.Sin(absAngleRad/2)*distance);
+
+            return secondWaypoint;
+        }
     }
 }
