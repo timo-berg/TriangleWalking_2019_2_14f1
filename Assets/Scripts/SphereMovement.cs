@@ -8,8 +8,8 @@ public class SphereMovement : Singleton<SphereMovement>
     bool isRotating = false;
     float remainingAngle = 0f;
     float totalAngle;
-    bool rightRotation = false;
     public float angularSpeed { get; private set; }
+    Vector3 vortex;
 
     //Translation variables
     bool isTranslating = false;
@@ -18,14 +18,13 @@ public class SphereMovement : Singleton<SphereMovement>
     public float translationSpeed { get; private set; }
     Vector3 translationDirection;
 
-    //Pushing variables
-    Vector3 pushAxis;
-    bool isPushing = false;
-    float sphereHeight = 1.5f;
+    
+    
+    
 
     //Other
     MeshRenderer meshRenderer;
-    bool isBaseline = true;
+    public bool isBaseline = false;
 
     protected override void Awake() {
         base.Awake();
@@ -51,19 +50,19 @@ public class SphereMovement : Singleton<SphereMovement>
 
     }
 
-    public void setRotation(float angle, bool rotateRight) {
+    public void setRotation(float angle, Vector3 rotationVortex) {
         //Public function to let other scripts rotate the sphere
         //Sets all necessary factors to enable the rotation
 
         //angle:        angle that is to be rotated
         //rotateRight:  true for clockwise rotation, false for counterclockwise rotation
 
+        vortex = rotationVortex;
         string direction;
         isRotating = true;
-        rightRotation = rotateRight;
         remainingAngle = Mathf.Abs(angle);
         totalAngle = Mathf.Abs(angle);
-        if (!rightRotation) {
+        if (angle < 0) {
             angularSpeed = -1 * Mathf.Abs(angularSpeed);
             direction = "left";
         } else {
@@ -74,18 +73,17 @@ public class SphereMovement : Singleton<SphereMovement>
         ExperimentManager.Instance.LogMarker(string.Format("event:rotationStart;angle:{0}:direction:{1}", angle,direction));
     }
 
-    public void setTranslation(float distance) {
+    public void setTranslation(Vector3 targetPosition) {
         //Public function to let other scripts translate the sphere
         //Sets all necessary factors to enable the translation
 
-        //dsitance:     distance that is to be translated
-
+        Vector3 translationVector = targetPosition - transform.position;
+        translationVector -= new Vector3(0f, translationVector.y, 0f);
         isTranslating = true;
-        remainingDistance = distance;
-        totalDistance = distance;
-        translationDirection = getSpherePosition() - PlayerMovement.Instance.getPlayerPosition();
+        totalDistance = remainingDistance = translationVector.magnitude + ConfigValues.nearDistance;
+        translationDirection = translationVector;
 
-        ExperimentManager.Instance.LogMarker(string.Format("event:translationStart;distance:{0}", distance));
+        ExperimentManager.Instance.LogMarker(string.Format("event:translationStart;distance:{0}", translationVector.magnitude));
     }
 
     void translateSphere() {
@@ -117,7 +115,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Rotation increment
         float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
         // Spin the object around the Player.
-        transform.RotateAround(PlayerMovement.Instance.getPlayerPosition(), Vector3.up, roationIncrement);  
+        transform.RotateAround(vortex, Vector3.up, roationIncrement);  
         //Decrement by the travelled rotation
         remainingAngle -= Mathf.Abs(roationIncrement);
         //Turn color slowly to red when remaining angle is below 30 deg
@@ -143,6 +141,10 @@ public class SphereMovement : Singleton<SphereMovement>
         return position;
     }
 
+    public void setSpherePosition(Vector3 position) {
+        transform.position = position + new Vector3(0f, ExperimentManager.Instance.participantHeight, 0f);
+    }
+
 
     void updateSphereColor(float remainingAmount) {
         //Updates the sphere color based on the remaining travel amount
@@ -154,6 +156,46 @@ public class SphereMovement : Singleton<SphereMovement>
         }
         
         
+    }
+
+    public IEnumerator breath()
+    {
+        //Coroutine that scales up the sphere and then down again
+        //to indicate an event
+        int FramesCount = 10;
+        float AnimationTimeSeconds = 0.1f;
+
+        float TargetScale = 0.15f;
+        float InitScale = transform.localScale.y;
+        float _currentScale = InitScale;
+        
+        float _deltaTime = AnimationTimeSeconds/FramesCount;
+        float _dx = (TargetScale - InitScale)/FramesCount;
+        bool  _upScale = true;
+
+        while (_upScale)
+        {
+            _currentScale += _dx;
+            if (_currentScale > TargetScale)
+            {
+                _upScale = false;
+                _currentScale = TargetScale;
+            }
+            transform.localScale = Vector3.one * _currentScale;
+            yield return new WaitForSeconds(_deltaTime);
+        }
+
+        while (!_upScale)
+        {
+            _currentScale -= _dx;
+            if (_currentScale < InitScale)
+            {
+                _upScale = true;
+                _currentScale = InitScale;
+            }
+            transform.localScale = Vector3.one * _currentScale;
+            yield return new WaitForSeconds(_deltaTime);
+        }
     }
 
 }

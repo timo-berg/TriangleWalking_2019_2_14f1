@@ -7,7 +7,7 @@ public class BaselineTask : Singleton<BaselineTask>
 {
         int remainingWaypoints;
         bool baselineRunning;
-
+        /*
         public void initiateLongBaseline(int numberWaypoints) {      
             remainingWaypoints = numberWaypoints; 
             baselineRunning = true;
@@ -22,7 +22,7 @@ public class BaselineTask : Singleton<BaselineTask>
         }
 
 
-
+        
         IEnumerator executeLongBaseline() {
             while(remainingWaypoints > 0) {
                 //Create a waypoint
@@ -42,7 +42,7 @@ public class BaselineTask : Singleton<BaselineTask>
                 ExperimentManager.Instance.LogMarker(string.Format("event:baselineWaypoint;waypoint:{0}",waypoint));
                 //Set rotation parameters and start rotation
                 bool rotateRight = rotationAngle >= 0;
-                SphereMovement.Instance.setRotation(Mathf.Abs(rotationAngle), rotateRight);
+                SphereMovement.Instance.setRotation(Mathf.Abs(rotationAngle));
                 //Wait until rotation is completed
                 yield return new WaitWhile(() => SphereMovement.Instance.isSphereRotating());
 
@@ -100,5 +100,5 @@ public class BaselineTask : Singleton<BaselineTask>
 
         public bool isBaselineRunning() {
             return baselineRunning;
-        }
+    */
 }

@@ -6,7 +6,6 @@ using System;
 
 public class ExperimentManager : Singleton<ExperimentManager>
 {
-    public float nearDistance;
     public GameObject sphere;
     public GameObject VRplayer;
     public GameObject DesktopPlayer;
@@ -15,16 +14,16 @@ public class ExperimentManager : Singleton<ExperimentManager>
     public GameObject TrackerTorso;
     public bool isVR;
 
-    public int participantID;
-    float participantHeight = 1.7f;
+    public int participantID = 0;
+    public float participantHeight;
     
     protected override void Awake() {
         base.Awake();
         isVR = false;//StartButtonClick.Instance.isVR;
-        nearDistance = 2f;
     }
     void Start() {
-        sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
+        participantHeight = 1.5f;
+        //sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
         
         //UnityEngine.XR.XRSettings.enabled = true;
 
@@ -63,7 +62,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
         bool sphereMoving = true;
 
         //Checks if the player is close to the sphere
-        if (distancePlayerSphere() < nearDistance) {
+        if (distancePlayerSphere() < ConfigValues.nearDistance) {
             playerNearSphere = true;
         }
 

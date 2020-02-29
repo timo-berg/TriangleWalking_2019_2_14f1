@@ -18,6 +18,7 @@ public class Arrow : Singleton<Arrow>
         hand = GameObject.Find("RightHand");
         VRplayer = GameObject.Find("VRCamera");
         desktopCamera = GameObject.Find("DesktopCamera").GetComponent<Camera>();
+        GetComponent<Renderer>().enabled = false;
     }
 
     // Update is called once per frame

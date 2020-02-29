@@ -25,6 +25,7 @@ public class TriangleTask : Singleton<TriangleTask>
     Vector3 rotationVector;
     Vector3 pointingDirection;
 
+    /*
     public void initiateTriangle(int angleID, int secondDistanceID) {
         triangleRunning = true;
         //Set triangle parameters
@@ -117,5 +118,7 @@ public class TriangleTask : Singleton<TriangleTask>
     bool isCoroutineRunning() {
         return coroutineRunning;
     }
+
+    */
 
 }

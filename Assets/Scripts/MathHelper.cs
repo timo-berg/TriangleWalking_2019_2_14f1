@@ -63,7 +63,7 @@ public static class MathHelper
             home = ConfigValues.anchorPoints[1] + new Vector3(
                     Mathf.Cos(absAngleRad/2f)*firstDistance,
                     0, 
-                    Mathf.Sin(absAngleRad/2f)*firstDistance);
+                    -Mathf.Sin(absAngleRad/2f)*firstDistance);
 
             return home;
         }
@@ -87,9 +87,10 @@ public static class MathHelper
             secondWaypoint = ConfigValues.anchorPoints[1] + new Vector3(
                     Mathf.Cos(absAngleRad/2)*distance,
                     0, 
-                    -Mathf.Sin(absAngleRad/2)*distance);
+                    Mathf.Sin(absAngleRad/2)*distance);
 
             return secondWaypoint;
         }
     }
+
 }
