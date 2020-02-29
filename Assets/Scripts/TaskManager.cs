@@ -40,7 +40,7 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
-        NewBaselineTask.Instance.initiateInterTrialBaseline(3);
+        NewBaselineTask.Instance.initiateLongBaseline(3, 3);
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
         HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
@@ -51,6 +51,26 @@ public class TaskManager :  Singleton<TaskManager>
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
         NewTriangleTask.Instance.initiateTriangle(3);
+        yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
+        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
+
+                //First baseline
+        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
+        NewBaselineTask.Instance.initiateInterTrialBaseline(4);
+        yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
+        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
+
+        //First task
+        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return new WaitUntil(() => getKeyDown());
+        HMDMessageManager.Instance.HideMessage();
+        NewTriangleTask.Instance.initiateTriangle(4);
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
         HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
         yield return new WaitUntil(() => getKeyDown());
