@@ -11,15 +11,14 @@ public class TaskManager :  Singleton<TaskManager>
     void Start()
     {
         //Push an initial marker with experiment values
-        string marker = string.Format("event:experimentStart;angularSpeed:{0};translationSpeed:{1}", 
-                                        SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed);
-        ExperimentManager.Instance.LogMarker(marker);
+        ExperimentManager.Instance.LogMarker(string.Format(
+            "event:experimentStart;angularSpeed:{0};translationSpeed:{1}", 
+            SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed));
         //marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
         //                                StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
         StartCoroutine(taskQueue());
 
-        //controller.GetComponent<Hand>().Show();
-        //other.DoSomething();
+
 
     }
 
@@ -30,51 +29,63 @@ public class TaskManager :  Singleton<TaskManager>
     }
 
     IEnumerator taskQueue() {
-        //Wait for user input
-        HMDMessageManager.Instance.ShowMessage("Herzlich Willkommen! \n Zum Start bitte klicken.");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
+        //Welcome the player
+        yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
         ExperimentManager.Instance.hideTrackers();
+        
+        yield return StartCoroutine(longBaseline(0));
+        yield return StartCoroutine(triangleTask(0));
 
-        //First baseline
-        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
-        NewBaselineTask.Instance.initiateLongBaseline(3, 3);
-        yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
-        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
+        for (int trial = 1; trial<24; trial++) {
+            yield return StartCoroutine(interTrialBaseline(trial));
+            yield return StartCoroutine(triangleTask(trial));
+        }
 
-        //First task
-        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
+        yield return StartCoroutine(longBaseline(0));    
+    }
+
+    IEnumerator message(string message) {
+        HMDMessageManager.Instance.ShowMessage(message);
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();
-        NewTriangleTask.Instance.initiateTriangle(3);
+    }
+
+    IEnumerator triangleTask(int trial) {
+        ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0}", trial));
+        //Start triangle
+        yield return StartCoroutine(message("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        NewTriangleTask.Instance.initiateTriangle(trial);
+        //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
-        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
+        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
 
-                //First baseline
-        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
-        NewBaselineTask.Instance.initiateInterTrialBaseline(4);
+        ExperimentManager.Instance.LogMarker(string.Format("event:triangleEnd;trial{0}", trial));
+    }
+
+    IEnumerator interTrialBaseline(int trial) {
+        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineStart;trial:{0}", trial));
+        //Start baseline
+        yield return StartCoroutine(message("Desorientierung! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        NewBaselineTask.Instance.initiateInterTrialBaseline(trial);
+        //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
-        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
+        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
 
-        //First task
-        HMDMessageManager.Instance.ShowMessage("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
-        NewTriangleTask.Instance.initiateTriangle(4);
-        yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
-        HMDMessageManager.Instance.ShowMessage("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!");
-        yield return new WaitUntil(() => getKeyDown());
-        HMDMessageManager.Instance.HideMessage();
+        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineEnd;trial:{0}", trial));
+    }
+
+    IEnumerator longBaseline(int trial) {
+        ExperimentManager.Instance.LogMarker(string.Format(
+            "event:longBaselineStart;trial:{0};numberWaypoints:{1}", 
+            trial, ConfigValues.longBaselineWaypointNumber));
+        //Start baseline
+        yield return StartCoroutine(message("Desorientierung! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        NewBaselineTask.Instance.initiateLongBaseline(trial, ConfigValues.longBaselineWaypointNumber);
+        //Wait for end
+        yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
+        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
+        
+        ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineEnd;trial:{0}", trial));
     }
 
     public bool getKeyDown() {

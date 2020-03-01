@@ -11,6 +11,8 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
     int numWaypoints;
 
     public void initiateInterTrialBaseline(int runCounter){
+        //Initiates the intertrial baseline in which one random waypoint is travelled to.
+        //Afterwards the sphere travels to the start point of the next maze
         baselineRunning = true;
         SphereMovement.Instance.isBaseline = true;
 
@@ -50,32 +52,34 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
             PlayerMovement.Instance.getPlayerPosition() 
             + (transitPoint - PlayerMovement.Instance.getPlayerPosition()).normalized * 2f);
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        ExperimentManager.Instance.LogMarker("event:intertrialBaselineSphereSpotted");
 
+        //Lead to transit point
+        ExperimentManager.Instance.LogMarker(string.Format("event:intretrialBaselineTransitpoint;waypoint:{0}",transitPoint));
         //Translate to transit point
         SphereMovement.Instance.setTranslation(transitPoint);
-        yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-        yield return StartCoroutine(SphereMovement.Instance.breath());
-        yield return new WaitForSeconds(Random.Range(1f,2f));
+        yield return StartCoroutine(subtaskFinish());
 
+        //Lead to target point
+        ExperimentManager.Instance.LogMarker(string.Format("event:intretrialBaselineTargetpoint;waypoint:{0}",targetPoint));
         //Rotate towards target point
         Vector3 vec1 = transitPoint - startPoint;
         Vector3 vec2 = targetPoint - transitPoint;
         SphereMovement.Instance.setRotation(Vector3.SignedAngle(vec1, vec2, Vector3.up), transitPoint);
-        yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-        yield return StartCoroutine(SphereMovement.Instance.breath());
-        yield return new WaitForSeconds(Random.Range(1f,2f));
+        yield return StartCoroutine(subtaskFinish());
 
         //Translate to target point
         SphereMovement.Instance.setTranslation(targetPoint);
-        yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-        yield return StartCoroutine(SphereMovement.Instance.breath());
-        yield return new WaitForSeconds(Random.Range(1f,2f));
+        yield return StartCoroutine(subtaskFinish());
 
         baselineRunning = false;
         SphereMovement.Instance.isBaseline = false;
     }
 
     public void initiateLongBaseline(int runCounter, int numBaselineWaypoints){
+        //Initiates the long baseline in which the sphere travels to a given 
+        //number of random waypoints. Travels to the start point of the next 
+        //Triangle task at the end
         baselineRunning = true;
         SphereMovement.Instance.isBaseline = true;
 
@@ -95,6 +99,9 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
     }
 
     IEnumerator executeLongBaseline() {
+        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        ExperimentManager.Instance.LogMarker("event:longBaselineSphereSpotted");
+        //Travel to random waypoints
         float rotationAngle;        
         for (int count = numWaypoints; count > 0; count--) {
             //Create a waypoint
@@ -108,44 +115,42 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
                 rotationAngle = MathHelper.getAngle(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), waypoint);
                 translationDistance = MathHelper.getDistance(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), waypoint);
                 waypointSecure = MathHelper.proofWaypoint(rotationAngle, translationDistance);
-                Debug.Log("New waypoint");
             } while (!waypointSecure);
 
             Debug.DrawLine(PlayerMovement.Instance.getPlayerPosition(), waypoint, Color.magenta, 60f);
-            ExperimentManager.Instance.LogMarker(string.Format("event:baselineWaypoint;waypoint:{0}",waypoint));
+            ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineWaypoint;waypoint:{0}",waypoint));
             
             //Rotate towards target point
             SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
-            yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-            yield return StartCoroutine(SphereMovement.Instance.breath());
-            yield return new WaitForSeconds(Random.Range(1f,2f));
+            yield return StartCoroutine(subtaskFinish());
 
             //Translate to the waypoint
             SphereMovement.Instance.setTranslation(waypoint);
-            yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-            yield return StartCoroutine(SphereMovement.Instance.breath());
-            yield return new WaitForSeconds(Random.Range(1f,2f));
+            yield return StartCoroutine(subtaskFinish());
         }
 
         //Lead to target point
+        ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineTargetpoint;waypoint:{0}",targetPoint));
         //Rotate towards target point
         rotationAngle = MathHelper.getAngle(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), targetPoint);
         SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
-        yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
-        yield return StartCoroutine(SphereMovement.Instance.breath());
-        yield return new WaitForSeconds(Random.Range(1f,2f));
+        yield return StartCoroutine(subtaskFinish());
 
         //Translate to the waypoint
         SphereMovement.Instance.setTranslation(targetPoint);
+        yield return StartCoroutine(subtaskFinish());
+
+        //End the long baseline
+        baselineRunning = false;
+        SphereMovement.Instance.isBaseline = false;
+    }
+
+    IEnumerator subtaskFinish() {
+        //Coroutine that checks and ends a subtask
         yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
         yield return StartCoroutine(SphereMovement.Instance.breath());
+        ExperimentManager.Instance.LogMarker("event:subtaskFinished");
         yield return new WaitForSeconds(Random.Range(1f,2f));
-
-
-
-
-        baselineRunning = false;
-        ExperimentManager.Instance.LogMarker("event:longBaselineEnd");
     }
 
 

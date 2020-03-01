@@ -6,7 +6,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 {
 
     public CharacterController controller;
-    public float speed = 12f;
+    public float speed = 2f;
     public bool isMovementLocked = false;
     
     void Update()

@@ -34,6 +34,8 @@ public static class ConfigValues
 {-150,-90,90,60,120,150,120,150,60,150,-150,-150,-60,-60,120,-120,90,-120,-90,-120,-90,90,60,-60}};
 
     public static float nearDistance = 2f;
+
+    public static int longBaselineWaypointNumber = 4;
     /*
     
 
