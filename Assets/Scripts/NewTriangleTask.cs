@@ -48,6 +48,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
     IEnumerator executeTriangle() {
         //Show pole
         poleVisibility(true);
+        yield return new WaitForSeconds(0.5f);
         pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f;
         ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
@@ -86,9 +87,12 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         poleVisibility(true);
         targetCircleVisibility(true);
         
-        //End the task
-        yield return new WaitForSeconds(1f);
-        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        yield return new WaitForSeconds(0.5f);
+        float distanceError = Mathf.Round((homePoint - PlayerMovement.Instance.getPlayerPosition()).magnitude*100)/100;
+        yield return StartCoroutine(TaskManager.Instance.message(string.Format("{0} m daneben!", distanceError)));
+        addReward(distanceError);
+        ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
+
         poleVisibility(false);
         targetCircleVisibility(false);
 
@@ -113,5 +117,18 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
     void targetCircleVisibility(bool visible) {
         circleMesh.enabled = visible;
+    }
+    void addReward(float error) {
+        if (error < 1) {
+            ExperimentManager.Instance.reward += 5;
+        } else if (error < 2) {
+            ExperimentManager.Instance.reward += 4;
+        } else if (error < 3) {
+            ExperimentManager.Instance.reward += 3;
+        } else if (error < 4) {
+            ExperimentManager.Instance.reward += 2;
+        } else if (error < 5) {
+            ExperimentManager.Instance.reward += 1;
+        }
     }
 }

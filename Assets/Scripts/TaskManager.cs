@@ -41,10 +41,13 @@ public class TaskManager :  Singleton<TaskManager>
             yield return StartCoroutine(triangleTask(trial));
         }
 
-        yield return StartCoroutine(longBaseline(0));    
+        yield return StartCoroutine(longBaseline(0));
+
+        yield return StartCoroutine(message(string.Format("Danke für die Teilnahme \n Sie haben {0} Punkte erreicht!", ExperimentManager.Instance.reward)));
+
     }
 
-    IEnumerator message(string message) {
+    public IEnumerator message(string message) {
         HMDMessageManager.Instance.ShowMessage(message);
         yield return new WaitUntil(() => getKeyDown());
         HMDMessageManager.Instance.HideMessage();

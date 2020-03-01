@@ -16,6 +16,8 @@ public class ExperimentManager : Singleton<ExperimentManager>
 
     public int participantID = 0;
     public float participantHeight;
+
+    public int reward;
     
     protected override void Awake() {
         base.Awake();
@@ -23,6 +25,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     }
     void Start() {
         participantHeight = 1.5f;
+        reward = 0;
         //sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
         
         //UnityEngine.XR.XRSettings.enabled = true;
