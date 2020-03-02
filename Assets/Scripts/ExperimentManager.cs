@@ -12,6 +12,16 @@ public class ExperimentManager : Singleton<ExperimentManager>
     public GameObject TrackerLeft;
     public GameObject TrackerRight;
     public GameObject TrackerTorso;
+
+    public GameObject Short1;
+    public GameObject Short2;
+    public GameObject Long1;
+    public GameObject Long2;
+    MeshRenderer short1Mesh;
+    MeshRenderer short2Mesh;
+    MeshRenderer long1Mesh;
+    MeshRenderer long2Mesh;
+    
     public bool isVR;
 
     public int participantID = 0;
@@ -43,21 +53,16 @@ public class ExperimentManager : Singleton<ExperimentManager>
 
         }
 
-        /*
-        float angle = 150f;
-        float distance = ConfigValues.secondDistances[1];
-        Vector3 homePoint = MathHelper.getHomePoint(angle);
-        Vector3 secondWaypoint = MathHelper.getSecondWaypoint(angle, distance);
-        Vector3 firstWaypoint = ConfigValues.anchorPoints[1];
-        Debug.Log(homePoint);
-        Debug.Log(firstWaypoint);
-        Debug.Log(secondWaypoint);
-        Debug.DrawLine(homePoint, firstWaypoint, Color.white, 20f);
-        Debug.DrawLine(firstWaypoint, secondWaypoint, Color.black, 20f);
-        */
+        //Room bound mesh
+        short1Mesh = Short1.GetComponent<MeshRenderer>();
+        short2Mesh = Short2.GetComponent<MeshRenderer>();
+        long1Mesh = Long1.GetComponent<MeshRenderer>();
+        long2Mesh = Long2.GetComponent<MeshRenderer>();
+
     }
 
     void Update() {
+        playerOutOfBounds();
     }
 
     public bool isTaskFinished() {
@@ -102,5 +107,26 @@ public class ExperimentManager : Singleton<ExperimentManager>
             TrackerLeft.GetComponent<MeshRenderer>().enabled = false;
             TrackerRight.GetComponent<MeshRenderer>().enabled = false;
             TrackerTorso.GetComponent<MeshRenderer>().enabled = false;
+    }
+
+    void playerOutOfBounds() {
+        //Shows the room walls if the VR player is to close (0.2m) to them
+        Vector3 position = PlayerMovement.Instance.getPlayerPosition();
+        if (isVR) {
+            if (position.x < -2.5f ||
+                position.x > 3.5f ||
+                position.z < -5f ||
+                position.z > 8f) {
+                    short1Mesh.enabled = true;
+                    short2Mesh.enabled = true;
+                    long1Mesh.enabled = true;
+                    long2Mesh.enabled = true;
+                } else {
+                    short1Mesh.enabled = false;
+                    short2Mesh.enabled = false;
+                    long1Mesh.enabled = false;
+                    long2Mesh.enabled = false;
+                }
+        }
     }
 }
