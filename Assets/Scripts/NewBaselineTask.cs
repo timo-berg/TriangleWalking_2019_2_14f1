@@ -72,6 +72,9 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         SphereMovement.Instance.setTranslation(targetPoint);
         yield return StartCoroutine(subtaskFinish());
 
+        //Hide sphere
+        SphereMovement.Instance.toggleVisibility(false);
+
         baselineRunning = false;
         SphereMovement.Instance.isBaseline = false;
     }
@@ -139,6 +142,9 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         //Translate to the waypoint
         SphereMovement.Instance.setTranslation(targetPoint);
         yield return StartCoroutine(subtaskFinish());
+
+        //Hide sphere
+        SphereMovement.Instance.toggleVisibility(false);
 
         //End the long baseline
         baselineRunning = false;

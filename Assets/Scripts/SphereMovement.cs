@@ -158,6 +158,10 @@ public class SphereMovement : Singleton<SphereMovement>
         
     }
 
+    public void toggleVisibility(bool visibility) {
+        meshRenderer.enabled = visibility;
+    }
+
     public IEnumerator breath()
     {
         //Coroutine that scales up the sphere and then down again

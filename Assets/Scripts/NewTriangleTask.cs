@@ -49,10 +49,14 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Show pole
         poleVisibility(true);
         yield return new WaitForSeconds(0.5f);
-        pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f;
+        pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f + new Vector3(0f, -1f, 0f);
+        pole.transform.rotation = Quaternion.Euler(-90f, 0f, 
+                                        Vector3.SignedAngle(Vector3.right, firstWaypoint - homePoint, Vector3.up));
+
         ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
         poleVisibility(false);
+        SphereMovement.Instance.toggleVisibility(true);
 
         //Lead to first point
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));

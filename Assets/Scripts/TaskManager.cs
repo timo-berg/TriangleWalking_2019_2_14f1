@@ -33,7 +33,7 @@ public class TaskManager :  Singleton<TaskManager>
         yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
         ExperimentManager.Instance.hideTrackers();
         
-        yield return StartCoroutine(longBaseline(0));
+        //yield return StartCoroutine(longBaseline(0));
         yield return StartCoroutine(triangleTask(0));
 
         for (int trial = 1; trial<24; trial++) {
@@ -72,7 +72,6 @@ public class TaskManager :  Singleton<TaskManager>
         NewBaselineTask.Instance.initiateInterTrialBaseline(trial);
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
-        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
 
         ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineEnd;trial:{0}", trial));
     }
@@ -86,7 +85,6 @@ public class TaskManager :  Singleton<TaskManager>
         NewBaselineTask.Instance.initiateLongBaseline(trial, ConfigValues.longBaselineWaypointNumber);
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
-        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
         
         ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineEnd;trial:{0}", trial));
     }
