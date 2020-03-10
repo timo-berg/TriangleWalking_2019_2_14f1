@@ -6,34 +6,32 @@ public class PlayerMovement : Singleton<PlayerMovement>
 {
 
     public CharacterController controller;
-    public float speed = 2f;
+    float speed = 0.3f;
     public bool isMovementLocked = false;
+    float z;
+    float scaleFactor;
+    Vector3 move;
     
     void Update()
     {
 
         if (isMovementLocked == false) {
-            float x = Input.GetAxis("Horizontal");
-            float z = Input.GetAxis("Vertical");
-            Vector3 move = transform.right * x + transform.forward * z;
+            //float x = Input.GetAxis("Horizontal");
+            
+            z = Input.GetAxis("Vertical");
+            move = transform.forward * z; //transform.right * x + 
 
-            controller.Move(move * speed * Time.deltaTime);
-        }
 
-        /*
-        if (Input.GetKeyDown("left")) {
-            SphereMovement.Instance.setRotation(45f, false);
+            if (SphereMovement.Instance.isSphereTranslating()) {
+                scaleFactor = SphereMovement.Instance.translationScalingFactor;
+            } else {
+                scaleFactor = 1f;
+            }
+            move = move * speed * scaleFactor * Time.deltaTime;
+        
+            controller.Move(move);
         }
-
-        if (Input.GetKeyDown("right")) {
-            SphereMovement.Instance.setRotation(45f, true);
-        }
-
-        if (Input.GetKeyDown("up")) {
-            SphereMovement.Instance.setTranslation(4f);
-        }
-        */
-       
+    
 
 
     }

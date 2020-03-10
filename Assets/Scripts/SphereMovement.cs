@@ -10,6 +10,8 @@ public class SphereMovement : Singleton<SphereMovement>
     float totalAngle;
     public float angularSpeed { get; private set; }
     Vector3 vortex;
+    public float rotationScalingFactor;
+    float roationIncrement;
 
     //Translation variables
     bool isTranslating = false;
@@ -17,6 +19,7 @@ public class SphereMovement : Singleton<SphereMovement>
     float totalDistance;
     public float translationSpeed { get; private set; }
     Vector3 translationDirection;
+    public float translationScalingFactor;
 
     
     
@@ -50,18 +53,19 @@ public class SphereMovement : Singleton<SphereMovement>
 
     }
 
-    public void setRotation(float angle, Vector3 rotationVortex) {
+    public void setRotation(Vector3 goal) {
         //Public function to let other scripts rotate the sphere
         //Sets all necessary factors to enable the rotation
 
         //angle:        angle that is to be rotated
         //rotateRight:  true for clockwise rotation, false for counterclockwise rotation
-
-        vortex = rotationVortex;
+        vortex = PlayerMovement.Instance.getPlayerPosition();
         string direction;
         isRotating = true;
+        float angle = Vector3.SignedAngle(vortex - SphereMovement.Instance.getSpherePosition(), vortex - goal, Vector3.up);
         remainingAngle = Mathf.Abs(angle);
         totalAngle = Mathf.Abs(angle);
+        
         if (angle < 0) {
             angularSpeed = -1 * Mathf.Abs(angularSpeed);
             direction = "left";
@@ -70,15 +74,15 @@ public class SphereMovement : Singleton<SphereMovement>
             direction = "right";
         }
         
-        ExperimentManager.Instance.LogMarker(string.Format("event:rotationStart;angle:{0}:direction:{1}", angle,direction));
+        ExperimentManager.Instance.LogMarker(string.Format("event:rotationStart;angle:{0}:direction:{1}", totalAngle,direction));
     }
 
     public void setTranslation(Vector3 targetPosition) {
         //Public function to let other scripts translate the sphere
         //Sets all necessary factors to enable the translation
-
         Vector3 translationVector = targetPosition - transform.position;
         translationVector -= new Vector3(0f, translationVector.y, 0f);
+        Debug.DrawLine(targetPosition, targetPosition-translationVector, Color.red, 20f);
         isTranslating = true;
         totalDistance = remainingDistance = translationVector.magnitude + ConfigValues.nearDistance;
         translationDirection = translationVector;
@@ -90,13 +94,13 @@ public class SphereMovement : Singleton<SphereMovement>
         //Translates the sphere forward as long as there is remaining distance left
 
         //Get sine scaling factor
-        float scalingFactor = MathHelper.sineScaleFactor(remainingDistance, totalDistance);
+        translationScalingFactor = MathHelper.sineScaleFactor(remainingDistance, totalDistance);
         //Translation vector with scaled length
-        Vector3 translationVector = translationDirection.normalized * (Time.deltaTime * scalingFactor *  translationSpeed);
+        Vector3 translationVector = translationDirection.normalized * (Time.deltaTime * translationScalingFactor *  translationSpeed);
         //Move sphere forward
         transform.Translate(translationVector, Space.World);
         //Decrement by the travelled distance
-        remainingDistance -= Time.deltaTime * translationSpeed * scalingFactor;
+        remainingDistance -= Time.deltaTime * translationSpeed * translationScalingFactor;
 
         updateSphereColor(remainingDistance);
         //Stop the translation if there is no remaining distance
@@ -111,9 +115,9 @@ public class SphereMovement : Singleton<SphereMovement>
         //Rotates the sphere at a fixed distance around the player as long as there is a remaining angle left
 
         //Get sine scaling factor
-        float scalingFactor = MathHelper.sineScaleFactor(remainingAngle, totalAngle);
+        rotationScalingFactor = MathHelper.sineScaleFactor(remainingAngle, totalAngle);
         //Rotation increment
-        float roationIncrement = angularSpeed * Time.deltaTime * scalingFactor;
+        roationIncrement = angularSpeed * Time.deltaTime * rotationScalingFactor;
         // Spin the object around the Player.
         transform.RotateAround(vortex, Vector3.up, roationIncrement);  
         //Decrement by the travelled rotation

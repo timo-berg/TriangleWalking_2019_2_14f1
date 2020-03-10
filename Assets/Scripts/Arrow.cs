@@ -31,10 +31,10 @@ public class Arrow : Singleton<Arrow>
             transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
             //Make the arrow face the participant
             transform.LookAt(desktopPlayer.transform, Vector3.up);
-            transform.Rotate(110f, 180f, 0f, Space.Self);
+            transform.Rotate(125f, 180f, 0f, Space.Self);
         } else if (clippedToController) {
             transform.position = hand.transform.position;
-            transform.position = new Vector3(transform.position.x, 1f, transform.position.z);
+            transform.position = new Vector3(transform.position.x, 1.5f, transform.position.z);
             transform.LookAt(VRplayer.transform, Vector3.up);
             transform.Rotate(20f, 180f, 0f, Space.Self);
             

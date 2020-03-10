@@ -61,14 +61,15 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Lead to first point
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));
         //Translate to first point
-        SphereMovement.Instance.setSpherePosition(pole.transform.position);
+        SphereMovement.Instance.setSpherePosition(pole.transform.position + new Vector3(0f, 1f, 0f));
         SphereMovement.Instance.setTranslation(firstWaypoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Lead to second point
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskSecondpoint;waypoint:{0}",secondWaypoint));
         //Rotate towards second point
-        SphereMovement.Instance.setRotation(Mathf.Sign(angle)*(180 - Mathf.Abs(angle)), firstWaypoint);
+        //SphereMovement.Instance.setRotation(Mathf.Sign(angle)*(180 - Mathf.Abs(angle)), firstWaypoint);
+        SphereMovement.Instance.setRotation(secondWaypoint);
         yield return StartCoroutine(subtaskFinish());
         //Translate to second point
         SphereMovement.Instance.setTranslation(secondWaypoint);

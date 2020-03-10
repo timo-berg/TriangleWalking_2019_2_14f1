@@ -56,7 +56,7 @@ public class TaskManager :  Singleton<TaskManager>
     IEnumerator triangleTask(int trial) {
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0}", trial));
         //Start triangle
-        yield return StartCoroutine(message("Aufgabe! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        yield return StartCoroutine(message("Aufgabe! \n Suchen sie den Pfosten und richten sich aus! \n Zum Fortfahren bitte klicken!"));
         NewTriangleTask.Instance.initiateTriangle(trial);
         //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());

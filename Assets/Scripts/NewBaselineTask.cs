@@ -65,7 +65,8 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         //Rotate towards target point
         Vector3 vec1 = transitPoint - startPoint;
         Vector3 vec2 = targetPoint - transitPoint;
-        SphereMovement.Instance.setRotation(Vector3.SignedAngle(vec1, vec2, Vector3.up), transitPoint);
+        //SphereMovement.Instance.setRotation(Vector3.SignedAngle(vec1, vec2, Vector3.up), transitPoint);
+        SphereMovement.Instance.setRotation(targetPoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Translate to target point
@@ -124,7 +125,8 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
             ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineWaypoint;waypoint:{0}",waypoint));
             
             //Rotate towards target point
-            SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
+            //SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
+            SphereMovement.Instance.setRotation(waypoint);
             yield return StartCoroutine(subtaskFinish());
 
             //Translate to the waypoint
@@ -136,7 +138,8 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineTargetpoint;waypoint:{0}",targetPoint));
         //Rotate towards target point
         rotationAngle = MathHelper.getAngle(SphereMovement.Instance.getSpherePosition(), PlayerMovement.Instance.getPlayerPosition(), targetPoint);
-        SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
+        //SphereMovement.Instance.setRotation(rotationAngle, PlayerMovement.Instance.getPlayerPosition());
+        SphereMovement.Instance.setRotation(targetPoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Translate to the waypoint
