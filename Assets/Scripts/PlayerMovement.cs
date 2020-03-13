@@ -27,7 +27,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             } else {
                 scaleFactor = 1f;
             }
-            move = move * speed * scaleFactor * Time.deltaTime;
+            move = move * speed; // * scaleFactor * Time.deltaTime
         
             controller.Move(move);
         }
@@ -55,6 +55,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
             return position;
         }
 
+    }
+
+    public Vector3 getPlayerGaze() {
+        return transform.TransformDirection(UnityEngine.Vector3.forward);
     }
 
 }

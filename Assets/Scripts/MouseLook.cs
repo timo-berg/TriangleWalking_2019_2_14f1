@@ -44,7 +44,7 @@ public class MouseLook : MonoBehaviour
                 scaleFactor = 1.5f;
             }
 
-            playerBody.Rotate(Vector3.up * x * rotationSpeed * scaleFactor * Time.deltaTime);    
+            playerBody.Rotate(Vector3.up * x * rotationSpeed );  // * scaleFactor * Time.deltaTime
         }
 
 

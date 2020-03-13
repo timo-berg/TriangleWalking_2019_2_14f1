@@ -75,14 +75,12 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         SphereMovement.Instance.setTranslation(secondWaypoint);
         yield return StartCoroutine(subtaskFinish());
 
+
         //Homing task
         ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskStart;waypoint");
         //Show arrow
-        Arrow.Instance.enablePointing(true);
-        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskAngleConfirmed;waypoint");
-        Arrow.Instance.enablePointing(false);
-
+        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(homePoint, firstWaypoint));
+        
         //Homing task and performance check
         yield return new WaitForSeconds(1f);
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
