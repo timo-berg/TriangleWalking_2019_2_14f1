@@ -15,6 +15,7 @@ public class ArrowManager : Singleton<ArrowManager>
 
     float distance;
     bool selecting;
+    bool alloIsActive;
     
 
     // Start is called before the first frame update
@@ -27,20 +28,25 @@ public class ArrowManager : Singleton<ArrowManager>
 
     void Update() {
         if (selecting) {
-            UnityEngine.Vector3 playerGaze = PlayerMovement.Instance.getPlayerGaze();
-            RaycastHit hit;
+            //Get the point between the arrows
+            UnityEngine.Vector3 midpoint = UnityEngine.Vector3.Lerp(egoArrow.transform.position, 
+                alloArrow.transform.position, 0.5f); 
+            midpoint -= new UnityEngine.Vector3(0f, midpoint.y, 0f);
 
-            if (Physics.Raycast(transform.position, PlayerMovement.Instance.getPlayerGaze(), out hit , Mathf.Infinity)) {
-                if (hit.transform.gameObject == egoArrow) {
-                    egoArrowMesh.material.color = new Color(2, 0, 0);
-                } else if (hit.transform.gameObject == alloArrow) {
-                    alloArrowMesh.material.color = new Color(2, 0, 0);
-                } else {
-                    egoArrowMesh.material.color = new Color(1, 1, 1);
-                    alloArrowMesh.material.color = new Color(1, 1, 1);
-                }
+            UnityEngine.Vector3 midvector = midpoint - PlayerMovement.Instance.getPlayerPosition(); 
+
+            UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPlayerGaze();
+
+            if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0) {
+                egoArrowMesh.material.color = new Color(2, 0, 0);
+                alloArrowMesh.material.color = new Color(1, 1, 1);
+                alloIsActive = false;
+            } else {
+                alloArrowMesh.material.color = new Color(2, 0, 0);
+                egoArrowMesh.material.color = new Color(1, 1, 1);
+                alloIsActive = true;
             }
-                
+
         }
         
     }
@@ -55,15 +61,19 @@ public class ArrowManager : Singleton<ArrowManager>
         UnityEngine.Vector3 egoPosition = playerPosition + (playerPosition - firstWaypoint).normalized * distance;
         UnityEngine.Vector3 egoDirection = egoPosition - homePoint;
 
-        Debug.DrawLine(homePoint, alloDirection, Color.red, 20f);
-        Debug.DrawLine(homePoint, egoDirection, Color.green, 20f);
+        Debug.DrawLine(alloPosition, homePoint, Color.red, 20f);
+        Debug.DrawLine(egoPosition, homePoint, Color.green, 20f);
+
+        Debug.Log(homePoint);
+        Debug.Log(alloPosition);
+        Debug.Log(egoPosition);
 
         //Move arrows
-        alloArrow.transform.position = alloPosition;
-        alloArrow.transform.rotation.SetLookRotation(alloDirection, UnityEngine.Vector3.left);
-
-        egoArrow.transform.position = egoPosition;
-        egoArrow.transform.rotation.SetLookRotation(egoDirection, UnityEngine.Vector3.left);
+        alloArrow.transform.position = alloPosition + new UnityEngine.Vector3(0f, 1.2f, 0f);
+        alloArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, alloDirection);
+        
+        egoArrow.transform.position = egoPosition + new UnityEngine.Vector3(0f, 1.2f, 0f);
+        egoArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, egoDirection);
         
         //Show arrows
         alloArrowMesh.enabled = true;
@@ -72,6 +82,16 @@ public class ArrowManager : Singleton<ArrowManager>
         //Select arrow
         selecting = true;
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        
+        //Log the result
+        string choice;
+        if (alloIsActive) {
+            choice = "allocentric";
+        } else {
+            choice = "egocentric";
+        }
+        ExperimentManager.Instance.LogMarker("event:homingArrowChosen;homingArrow:" + choice);
+
 
         alloArrowMesh.enabled = false;
         egoArrowMesh.enabled = false;

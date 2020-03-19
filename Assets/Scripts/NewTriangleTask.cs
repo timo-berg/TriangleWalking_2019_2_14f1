@@ -47,11 +47,12 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
     IEnumerator executeTriangle() {
         //Show pole
-        poleVisibility(true);
+        
         yield return new WaitForSeconds(0.5f);
         pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f + new Vector3(0f, -1f, 0f);
         pole.transform.rotation = Quaternion.Euler(-90f, 0f, 
                                         Vector3.SignedAngle(Vector3.right, firstWaypoint - homePoint, Vector3.up));
+        poleVisibility(true);
 
         ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
@@ -79,6 +80,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Homing task
         ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskStart;waypoint");
         //Show arrow
+        SphereMovement.Instance.toggleVisibility(false);
         yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(homePoint, firstWaypoint));
         
         //Homing task and performance check
@@ -98,7 +100,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
         poleVisibility(false);
         targetCircleVisibility(false);
-
+        SphereMovement.Instance.toggleVisibility(true);
         triangleRunning = false;
     }
 

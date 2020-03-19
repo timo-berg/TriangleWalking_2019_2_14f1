@@ -27,7 +27,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             } else {
                 scaleFactor = 1f;
             }
-            move = move * speed; // * scaleFactor * Time.deltaTime
+            move = move * speed * scaleFactor * Time.deltaTime; // 
         
             controller.Move(move);
         }
