@@ -41,7 +41,7 @@ public class MouseLook : MonoBehaviour
             if (SphereMovement.Instance.isSphereRotating()) {
                 scaleFactor = SphereMovement.Instance.rotationScalingFactor;
             } else {
-                scaleFactor = 1.5f;
+                scaleFactor = 1f;
             }
 
             playerBody.Rotate(Vector3.up * x * rotationSpeed * scaleFactor * Time.deltaTime);  // 

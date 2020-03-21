@@ -50,18 +50,18 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         //Place Sphere and wait for player to spot it
         SphereMovement.Instance.setSpherePosition(
             PlayerMovement.Instance.getPlayerPosition() 
-            + (transitPoint - PlayerMovement.Instance.getPlayerPosition()).normalized * 2f);
-        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+            + (transitPoint - PlayerMovement.Instance.getPlayerPosition()).normalized * 2.2f);
+        yield return StartCoroutine(subtaskFinish());
         ExperimentManager.Instance.LogMarker("event:intertrialBaselineSphereSpotted");
 
         //Lead to transit point
-        ExperimentManager.Instance.LogMarker(string.Format("event:intretrialBaselineTransitpoint;waypoint:{0}",transitPoint));
+        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineTransitpoint;waypoint:{0}",transitPoint));
         //Translate to transit point
         SphereMovement.Instance.setTranslation(transitPoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Lead to target point
-        ExperimentManager.Instance.LogMarker(string.Format("event:intretrialBaselineTargetpoint;waypoint:{0}",targetPoint));
+        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineTargetpoint;waypoint:{0}",targetPoint));
         //Rotate towards target point
         Vector3 vec1 = transitPoint - startPoint;
         Vector3 vec2 = targetPoint - transitPoint;

@@ -32,6 +32,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     protected override void Awake() {
         base.Awake();
         isVR = StartButtonClick.Instance.isVR;
+        participantID = int.Parse(StartButtonClick.Instance.ID);
     }
     void Start() {
         participantHeight = 1.5f;

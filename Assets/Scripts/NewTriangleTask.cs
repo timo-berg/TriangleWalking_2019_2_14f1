@@ -47,15 +47,15 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
     IEnumerator executeTriangle() {
         //Show pole
-        
         yield return new WaitForSeconds(0.5f);
         pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f + new Vector3(0f, -1f, 0f);
         pole.transform.rotation = Quaternion.Euler(-90f, 0f, 
                                         Vector3.SignedAngle(Vector3.right, firstWaypoint - homePoint, Vector3.up));
         poleVisibility(true);
 
-        ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
+        //Wait for player to find pole and confirm
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
         poleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
 
@@ -89,7 +89,6 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskLocationConfirmed;waypoint");
         pole.transform.position = homePoint;
         targetCircle.transform.position = new Vector3(homePoint.x,-1.09f ,homePoint.z);
-        poleVisibility(true);
         targetCircleVisibility(true);
         
         yield return new WaitForSeconds(0.5f);
@@ -98,7 +97,6 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         addReward(distanceError);
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
 
-        poleVisibility(false);
         targetCircleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
         triangleRunning = false;

@@ -29,6 +29,9 @@ public class TaskManager :  Singleton<TaskManager>
     }
 
     IEnumerator taskQueue() {
+        //TEST
+        Debug.Log(ExperimentManager.Instance.participantID);
+
         //Welcome the player
         yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
         ExperimentManager.Instance.hideTrackers();
