@@ -28,24 +28,7 @@ public class ArrowManager : Singleton<ArrowManager>
 
     void Update() {
         if (selecting) {
-            //Get the point between the arrows
-            UnityEngine.Vector3 midpoint = UnityEngine.Vector3.Lerp(egoArrow.transform.position, 
-                alloArrow.transform.position, 0.5f); 
-            midpoint -= new UnityEngine.Vector3(0f, midpoint.y, 0f);
-
-            UnityEngine.Vector3 midvector = midpoint - PlayerMovement.Instance.getPlayerPosition(); 
-
-            UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPlayerGaze();
-
-            if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0) {
-                egoArrowMesh.material.color = new Color(2, 0, 0);
-                alloArrowMesh.material.color = new Color(1, 1, 1);
-                alloIsActive = false;
-            } else {
-                alloArrowMesh.material.color = new Color(2, 0, 0);
-                egoArrowMesh.material.color = new Color(1, 1, 1);
-                alloIsActive = true;
-            }
+            
 
         }
         
@@ -80,9 +63,30 @@ public class ArrowManager : Singleton<ArrowManager>
         egoArrowMesh.enabled = true;
 
         //Select arrow
-        selecting = true;
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        
+
+        //Get the point between the arrows
+        UnityEngine.Vector3 midpoint = UnityEngine.Vector3.Lerp(egoArrow.transform.position,
+            alloArrow.transform.position, 0.5f);
+        midpoint -= new UnityEngine.Vector3(0f, midpoint.y, 0f);
+
+        UnityEngine.Vector3 midvector = midpoint - PlayerMovement.Instance.getPlayerPosition();
+
+        UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPlayerGaze();
+
+        if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0)
+        {
+            egoArrowMesh.material.color = new Color(2, 0, 0);
+            alloIsActive = false;
+        }
+        else
+        {
+            alloArrowMesh.material.color = new Color(2, 0, 0);
+            alloIsActive = true;
+        }
+
+        yield return new WaitForSeconds(1f);
+
         //Log the result
         string choice;
         if (alloIsActive) {
@@ -95,5 +99,8 @@ public class ArrowManager : Singleton<ArrowManager>
 
         alloArrowMesh.enabled = false;
         egoArrowMesh.enabled = false;
+
+        alloArrowMesh.material.color = new Color(1, 1, 1);
+        egoArrowMesh.material.color = new Color(1, 1, 1);
     }
 }

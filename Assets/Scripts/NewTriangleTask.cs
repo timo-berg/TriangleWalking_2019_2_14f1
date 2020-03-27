@@ -93,7 +93,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         
         yield return new WaitForSeconds(0.5f);
         float distanceError = Mathf.Round((homePoint - PlayerMovement.Instance.getPlayerPosition()).magnitude*100)/100;
-        yield return StartCoroutine(TaskManager.Instance.message(string.Format("{0} m daneben!", distanceError)));
+        yield return StartCoroutine(TaskManager.Instance.message(string.Format("{0} m vom Ziel entfernt!", distanceError)));
         addReward(distanceError);
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
 

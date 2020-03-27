@@ -525,9 +525,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   messageText: {fileID: 466688853}
   canvas: {fileID: 1505286276}
-  normalColor: {r: 0, g: 0, b: 0, a: 0}
-  warningColor: {r: 0, g: 0, b: 0, a: 0}
-  errorColor: {r: 0, g: 0, b: 0, a: 0}
+  normalColor: {r: 0, g: 0, b: 0, a: 1}
+  warningColor: {r: 0, g: 0, b: 0, a: 1}
+  errorColor: {r: 0, g: 0, b: 0, a: 1}
 --- !u!114 &268840453
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,7 +541,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  positionSmooth: 0.02
+  positionSmooth: 0.5
 --- !u!1 &274730719
 GameObject:
   m_ObjectHideFlags: 0
@@ -850,7 +850,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 0.392}
+  m_Color: {r: 1, g: 1, b: 1, a: 0.92941177}
   m_RaycastTarget: 1
   m_OnCullStateChanged:
     m_PersistentCalls:

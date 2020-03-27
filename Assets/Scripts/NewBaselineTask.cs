@@ -103,7 +103,7 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
     }
 
     IEnumerator executeLongBaseline() {
-        yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
+        yield return StartCoroutine(subtaskFinish());
         ExperimentManager.Instance.LogMarker("event:longBaselineSphereSpotted");
         //Travel to random waypoints
         float rotationAngle;        

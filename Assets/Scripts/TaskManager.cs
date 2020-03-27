@@ -59,7 +59,7 @@ public class TaskManager :  Singleton<TaskManager>
     IEnumerator triangleTask(int trial) {
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0}", trial));
         //Start triangle
-        yield return StartCoroutine(message("Aufgabe! \n Suchen sie den Pfosten und richten sich aus! \n Zum Fortfahren bitte klicken!"));
+        yield return StartCoroutine(message("Aufgabe! \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
         NewTriangleTask.Instance.initiateTriangle(trial);
         //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
@@ -71,7 +71,8 @@ public class TaskManager :  Singleton<TaskManager>
     IEnumerator interTrialBaseline(int trial) {
         ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineStart;trial:{0}", trial));
         //Start baseline
-        yield return StartCoroutine(message("Desorientierung! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
         NewBaselineTask.Instance.initiateInterTrialBaseline(trial);
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
@@ -84,7 +85,8 @@ public class TaskManager :  Singleton<TaskManager>
             "event:longBaselineStart;trial:{0};numberWaypoints:{1}", 
             trial, ConfigValues.longBaselineWaypointNumber));
         //Start baseline
-        yield return StartCoroutine(message("Desorientierung! \n Bitte folgen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        yield return new WaitForSeconds(0.5f);
+        yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
         NewBaselineTask.Instance.initiateLongBaseline(trial, ConfigValues.longBaselineWaypointNumber);
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());

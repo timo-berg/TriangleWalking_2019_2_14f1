@@ -25,7 +25,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
             if (SphereMovement.Instance.isSphereTranslating()) {
                 scaleFactor = SphereMovement.Instance.translationScalingFactor;
             } else {
-                scaleFactor = 1.3f;
+                scaleFactor = Mathf.Clamp(scaleFactor * 1.01f, 1f, 3f);
             }
             move = move * speed * scaleFactor * Time.deltaTime; // 
         
