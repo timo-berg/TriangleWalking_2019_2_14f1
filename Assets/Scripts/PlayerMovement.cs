@@ -5,7 +5,8 @@ using UnityEngine;
 public class PlayerMovement : Singleton<PlayerMovement>
 {
 
-    public CharacterController controller;
+    public CharacterController movementController;
+    public GameObject pointingController;
     float speed = 0.3f;
     public bool isMovementLocked = false;
     float z;
@@ -28,8 +29,8 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 scaleFactor = Mathf.Clamp(scaleFactor * 1.01f, 1f, 3f);
             }
             move = move * speed * scaleFactor * Time.deltaTime; // 
-        
-            controller.Move(move);
+
+            movementController.Move(move);
         }
     
 
@@ -59,6 +60,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     public Vector3 getPlayerGaze() {
         return transform.TransformDirection(UnityEngine.Vector3.forward);
+    }
+
+    public Vector3 getPointingGaze()
+    {
+        return pointingController.transform.TransformDirection(UnityEngine.Vector3.forward);
     }
 
 }

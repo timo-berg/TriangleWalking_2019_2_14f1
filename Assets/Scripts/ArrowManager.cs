@@ -14,9 +14,10 @@ public class ArrowManager : Singleton<ArrowManager>
     
 
     float distance;
-    bool selecting;
+    bool isSelecting;
+    bool hasSelected;
     bool alloIsActive;
-    
+    float direction;
 
     // Start is called before the first frame update
     void Start()
@@ -27,9 +28,65 @@ public class ArrowManager : Singleton<ArrowManager>
     }
 
     void Update() {
-        if (selecting) {
-            
+        if (isSelecting) {
+            if (ExperimentManager.Instance.isVR) {
+                //Get the point between the arrows
+                UnityEngine.Vector3 midpoint = UnityEngine.Vector3.Lerp(egoArrow.transform.position,
+                    alloArrow.transform.position, 0.5f);
+                midpoint -= new UnityEngine.Vector3(0f, midpoint.y, 0f);
 
+                UnityEngine.Vector3 midvector = midpoint - PlayerMovement.Instance.getPlayerPosition();
+
+                UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPointingGaze();
+
+                if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0)
+                {
+                    egoArrowMesh.material.color = new Color(2, 0, 0);
+                    alloArrowMesh.material.color = new Color(1, 1, 1);
+                    alloIsActive = false;
+                }
+                else
+                {
+                    alloArrowMesh.material.color = new Color(2, 0, 0);
+                    egoArrowMesh.material.color = new Color(1, 1, 1);
+                    alloIsActive = true;
+                }
+            }
+            else {
+                //Check keypress and change color according to the current gaze direction
+                UnityEngine.Vector3 perp = UnityEngine.Vector3.Cross(PlayerMovement.Instance.getPlayerGaze(), alloArrow.transform.position - PlayerMovement.Instance.getPlayerPosition());
+                direction = UnityEngine.Vector3.Dot(perp, UnityEngine.Vector3.up);
+
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    if (direction > 0) {
+                        alloArrowMesh.material.color = new Color(2, 0, 0);
+                        egoArrowMesh.material.color = new Color(1, 1, 1);
+                        alloIsActive = true;
+                        hasSelected = true;
+                    } else {
+                        alloArrowMesh.material.color = new Color(1, 1, 1);
+                        egoArrowMesh.material.color = new Color(2, 0, 0);
+                        alloIsActive = false;
+                        hasSelected = true;
+                    }
+                }
+
+                if (Input.GetKeyDown(KeyCode.LeftArrow))
+                {
+                    if (direction > 0) {
+                        alloArrowMesh.material.color = new Color(1, 1, 1);
+                        egoArrowMesh.material.color = new Color(2, 0, 0);
+                        alloIsActive = false;
+                        hasSelected = true;
+                    } else {
+                        alloArrowMesh.material.color = new Color(2, 0, 0);
+                        egoArrowMesh.material.color = new Color(1, 1, 1);
+                        alloIsActive = true;
+                        hasSelected = true;
+                    }
+                }
+            }
         }
         
     }
@@ -63,27 +120,14 @@ public class ArrowManager : Singleton<ArrowManager>
         egoArrowMesh.enabled = true;
 
         //Select arrow
+        isSelecting = true;
+
+        //Wait until the player has selected an arrow at least once
+        hasSelected = false;
+        yield return new WaitUntil(() => hasSelected);
+
+        //Wait for confirmation of currently selected arrow
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-
-        //Get the point between the arrows
-        UnityEngine.Vector3 midpoint = UnityEngine.Vector3.Lerp(egoArrow.transform.position,
-            alloArrow.transform.position, 0.5f);
-        midpoint -= new UnityEngine.Vector3(0f, midpoint.y, 0f);
-
-        UnityEngine.Vector3 midvector = midpoint - PlayerMovement.Instance.getPlayerPosition();
-
-        UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPlayerGaze();
-
-        if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0)
-        {
-            egoArrowMesh.material.color = new Color(2, 0, 0);
-            alloIsActive = false;
-        }
-        else
-        {
-            alloArrowMesh.material.color = new Color(2, 0, 0);
-            alloIsActive = true;
-        }
 
         yield return new WaitForSeconds(1f);
 
