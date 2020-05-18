@@ -35,7 +35,7 @@ public static class ConfigValues
 
     public static float nearDistance = 2f;
 
-    public static int longBaselineWaypointNumber = 4;
+    public static int longBaselineWaypointNumber = 1;
     /*
     
 

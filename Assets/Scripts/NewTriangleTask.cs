@@ -78,10 +78,12 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
 
         //Homing task
+        //Calculate gaze direction
+        Vector3 gazeAgv= GazeAverage();
         ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskStart;waypoint");
         //Show arrow
         SphereMovement.Instance.toggleVisibility(false);
-        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(homePoint, firstWaypoint));
+        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(gazeAgv));
         
         //Homing task and performance check
         yield return new WaitForSeconds(1f);
@@ -133,5 +135,23 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         } else if (error < 5) {
             ExperimentManager.Instance.reward += 1;
         }
+    }
+
+    Vector3 GazeAverage()
+    {
+        List<Vector3> gazeArraylist = new List<Vector3>();
+        Vector3 gazeAvg = Vector3.zero;
+
+        for (float i = 0; i <= 1; i += Time.deltaTime){
+            gazeArraylist.Add(PlayerMovement.Instance.getPlayerGaze());
+        }
+
+        for (int i = 0; i < gazeArraylist.Count; i++) {
+            gazeAvg += gazeArraylist[i];
+        }
+
+        gazeAvg = (gazeAvg / gazeArraylist.Count);
+        gazeAvg.y = 0f;
+        return gazeAvg.normalized;
     }
 }

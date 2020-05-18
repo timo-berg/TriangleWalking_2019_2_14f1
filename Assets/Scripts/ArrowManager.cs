@@ -91,30 +91,21 @@ public class ArrowManager : Singleton<ArrowManager>
         
     }
 
-    public IEnumerator homingVectorTask (UnityEngine.Vector3 homePoint, UnityEngine.Vector3 firstWaypoint) {
+    public IEnumerator homingVectorTask (UnityEngine.Vector3 playerGaze) {
         //Calculate homing vectors
         UnityEngine.Vector3 playerPosition = PlayerMovement.Instance.getPlayerPosition();
-        
-        UnityEngine.Vector3 alloPosition = playerPosition + (firstWaypoint - homePoint).normalized * distance;
-        UnityEngine.Vector3 alloDirection = alloPosition - homePoint;
-        
-        UnityEngine.Vector3 egoPosition = playerPosition + (playerPosition - firstWaypoint).normalized * distance;
-        UnityEngine.Vector3 egoDirection = egoPosition - homePoint;
+        UnityEngine.Vector3 perpVector = UnityEngine.Vector3.Cross(playerGaze, UnityEngine.Vector3.up);
 
-        Debug.DrawLine(alloPosition, homePoint, Color.red, 20f);
-        Debug.DrawLine(egoPosition, homePoint, Color.green, 20f);
-
-        Debug.Log(homePoint);
-        Debug.Log(alloPosition);
-        Debug.Log(egoPosition);
+        UnityEngine.Vector3 alloPosition = playerPosition + playerGaze*2f + perpVector/2f;
+        UnityEngine.Vector3 egoPosition = playerPosition + playerGaze*2f - perpVector/2f;
 
         //Move arrows
-        alloArrow.transform.position = alloPosition + new UnityEngine.Vector3(0f, 1.2f, 0f);
-        alloArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, alloDirection);
-        
-        egoArrow.transform.position = egoPosition + new UnityEngine.Vector3(0f, 1.2f, 0f);
-        egoArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, egoDirection);
-        
+        alloArrow.transform.position = alloPosition + new UnityEngine.Vector3(0f, 1.5f, 0f);
+        alloArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.up, perpVector);
+
+        egoArrow.transform.position = egoPosition + new UnityEngine.Vector3(0f, 1.5f, 0f);
+        egoArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.up, -perpVector);
+
         //Show arrows
         alloArrowMesh.enabled = true;
         egoArrowMesh.enabled = true;
@@ -147,4 +138,6 @@ public class ArrowManager : Singleton<ArrowManager>
         alloArrowMesh.material.color = new Color(1, 1, 1);
         egoArrowMesh.material.color = new Color(1, 1, 1);
     }
+
+
 }
