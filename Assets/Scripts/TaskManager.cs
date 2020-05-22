@@ -36,7 +36,7 @@ public class TaskManager :  Singleton<TaskManager>
         yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
         ExperimentManager.Instance.hideTrackers();
         
-        yield return StartCoroutine(longBaseline(0));
+        //Pyield return StartCoroutine(longBaseline(0));
         yield return StartCoroutine(triangleTask(0));
 
         for (int trial = 1; trial<24; trial++) {

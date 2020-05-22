@@ -83,7 +83,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskStart;waypoint");
         //Show arrow
         SphereMovement.Instance.toggleVisibility(false);
-        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(gazeAgv));
+        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(gazeAgv, homePoint));
         
         //Homing task and performance check
         yield return new WaitForSeconds(1f);

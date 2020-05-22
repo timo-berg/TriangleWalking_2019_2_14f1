@@ -91,7 +91,7 @@ public class ArrowManager : Singleton<ArrowManager>
         
     }
 
-    public IEnumerator homingVectorTask (UnityEngine.Vector3 playerGaze) {
+    public IEnumerator homingVectorTask (UnityEngine.Vector3 playerGaze, UnityEngine.Vector3 homePoint) {
         //Calculate homing vectors
         UnityEngine.Vector3 playerPosition = PlayerMovement.Instance.getPlayerPosition();
         UnityEngine.Vector3 perpVector = UnityEngine.Vector3.Cross(playerGaze, UnityEngine.Vector3.up);
@@ -99,12 +99,15 @@ public class ArrowManager : Singleton<ArrowManager>
         UnityEngine.Vector3 alloPosition = playerPosition + playerGaze*2f + perpVector/2f;
         UnityEngine.Vector3 egoPosition = playerPosition + playerGaze*2f - perpVector/2f;
 
+        UnityEngine.Vector3 alloDirection = alloPosition - homePoint;
+        UnityEngine.Vector3 egoDirection = egoPosition - homePoint;
+
         //Move arrows
         alloArrow.transform.position = alloPosition + new UnityEngine.Vector3(0f, 1.5f, 0f);
-        alloArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.up, perpVector);
+        alloArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, alloDirection);
 
         egoArrow.transform.position = egoPosition + new UnityEngine.Vector3(0f, 1.5f, 0f);
-        egoArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.up, -perpVector);
+        egoArrow.transform.rotation = UnityEngine.Quaternion.FromToRotation(UnityEngine.Vector3.down, egoDirection);
 
         //Show arrows
         alloArrowMesh.enabled = true;
