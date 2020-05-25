@@ -7,6 +7,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     public CharacterController movementController;
     public GameObject pointingController;
+    public GameObject VRCamera;
     float speed = 0.3f;
     public bool isMovementLocked = false;
     float z;
@@ -47,7 +48,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     public Vector3 getPlayerPosition() {
         if (ExperimentManager.Instance.isVR) {
-            Vector3 VRposition = GameObject.Find("VRCamera").GetComponent<Transform>().position;
+            Vector3 VRposition = VRCamera.transform.position;
             VRposition.y = 0f; 
             return VRposition;
         } else {
@@ -59,7 +60,11 @@ public class PlayerMovement : Singleton<PlayerMovement>
     }
 
     public Vector3 getPlayerGaze() {
-        return transform.TransformDirection(UnityEngine.Vector3.forward);
+        if (ExperimentManager.Instance.isVR) {
+            return  VRCamera.transform.TransformDirection(UnityEngine.Vector3.forward);;
+        } else {
+            return transform.TransformDirection(UnityEngine.Vector3.forward);
+        }
     }
 
     public Vector3 getPointingGaze()

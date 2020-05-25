@@ -39,17 +39,19 @@ public class ArrowManager : Singleton<ArrowManager>
 
                 UnityEngine.Vector3 gaze = PlayerMovement.Instance.getPointingGaze();
 
-                if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) < 0)
+                if (UnityEngine.Vector3.SignedAngle(midvector, gaze, UnityEngine.Vector3.up) > 0)
                 {
                     egoArrowMesh.material.color = new Color(2, 0, 0);
                     alloArrowMesh.material.color = new Color(1, 1, 1);
                     alloIsActive = false;
+                    hasSelected = true;
                 }
                 else
                 {
                     alloArrowMesh.material.color = new Color(2, 0, 0);
                     egoArrowMesh.material.color = new Color(1, 1, 1);
                     alloIsActive = true;
+                    hasSelected = true;
                 }
             }
             else {

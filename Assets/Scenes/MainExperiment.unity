@@ -722,6 +722,12 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: dc06161b6d97feb419f45f03b62e14b9, type: 3}
+--- !u!1 &395893837 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 125964, guid: dc06161b6d97feb419f45f03b62e14b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 395893836}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &457727188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1645,6 +1651,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   movementController: {fileID: 1230705097}
   pointingController: {fileID: 1716594696}
+  VRCamera: {fileID: 395893837}
   isMovementLocked: 0
 --- !u!1001 &1281424328
 PrefabInstance:
