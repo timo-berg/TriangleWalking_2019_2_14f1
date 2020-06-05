@@ -101,8 +101,11 @@ public class ArrowManager : Singleton<ArrowManager>
         UnityEngine.Vector3 alloPosition = playerPosition + playerGaze*2f + perpVector/2f;
         UnityEngine.Vector3 egoPosition = playerPosition + playerGaze*2f - perpVector/2f;
 
-        UnityEngine.Vector3 alloDirection = alloPosition - homePoint;
-        UnityEngine.Vector3 egoDirection = egoPosition - homePoint;
+        //UnityEngine.Vector3 alloDirection = alloPosition - homePoint;
+        //UnityEngine.Vector3 egoDirection = egoPosition - homePoint;
+
+        UnityEngine.Vector3 alloDirection = -perpVector;
+        UnityEngine.Vector3 egoDirection = perpVector;
 
         //Move arrows
         alloArrow.transform.position = alloPosition + new UnityEngine.Vector3(0f, 1.5f, 0f);
