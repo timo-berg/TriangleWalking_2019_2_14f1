@@ -8,12 +8,16 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public CharacterController movementController;
     public GameObject pointingController;
     public GameObject VRCamera;
-    float speed = 0.3f;
+    float speed;
     public bool isMovementLocked = false;
     float z;
     float scaleFactor;
     Vector3 move;
-    
+
+    void Start() {
+        speed = ConfigValues.translationSpeed;
+    }
+
     void Update()
     {
 
@@ -21,14 +25,14 @@ public class PlayerMovement : Singleton<PlayerMovement>
             //float x = Input.GetAxis("Horizontal");
             
             z = Input.GetAxis("Vertical");
-            move = transform.forward * z; //transform.right * x + 
-
+            move = Vector3.Scale(transform.forward, new Vector3(1,0,1)) * z; //transform.right * x + 
 
             if (SphereMovement.Instance.isSphereTranslating()) {
                 scaleFactor = SphereMovement.Instance.translationScalingFactor;
             } else {
                 scaleFactor = Mathf.Clamp(scaleFactor * 1.01f, 1f, 3f);
             }
+
             move = move * speed * scaleFactor * Time.deltaTime; // 
 
             movementController.Move(move);

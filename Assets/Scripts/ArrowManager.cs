@@ -128,8 +128,6 @@ public class ArrowManager : Singleton<ArrowManager>
         //Wait for confirmation of currently selected arrow
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
 
-        yield return new WaitForSeconds(1f);
-
         //Log the result
         string choice;
         if (alloIsActive) {

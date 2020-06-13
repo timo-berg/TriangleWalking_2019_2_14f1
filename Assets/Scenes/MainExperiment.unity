@@ -588,6 +588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerBody: {fileID: 1230705098}
+  cameraTilt: 0
 --- !u!81 &274730722
 AudioListener:
   m_ObjectHideFlags: 0
@@ -2033,6 +2034,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pole: {fileID: 1841739705}
   targetCircle: {fileID: 1445964849}
+  DesktopCamera: {fileID: 274730721}
 --- !u!1 &1528827321
 GameObject:
   m_ObjectHideFlags: 0

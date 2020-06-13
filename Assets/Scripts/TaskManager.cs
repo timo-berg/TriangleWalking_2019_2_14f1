@@ -98,7 +98,7 @@ public class TaskManager :  Singleton<TaskManager>
         if (ExperimentManager.Instance.isVR) {
             return SteamVR_Actions._default.GrabPinch.GetStateDown(SteamVR_Input_Sources.Any);
         } else {
-            return Input.GetKeyDown(KeyCode.Mouse0);
+            return Input.GetKeyDown(KeyCode.Space);
         }
     }
 

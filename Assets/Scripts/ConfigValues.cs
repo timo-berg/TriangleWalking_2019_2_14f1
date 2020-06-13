@@ -36,6 +36,10 @@ public static class ConfigValues
     public static float nearDistance = 2f;
 
     public static int longBaselineWaypointNumber = 2;
+
+    public static float angularSpeed = 15f;
+
+    public static float translationSpeed = 0.6f;
     /*
     
 

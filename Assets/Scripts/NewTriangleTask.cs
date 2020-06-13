@@ -8,6 +8,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
     MeshRenderer poleMesh;
     public GameObject targetCircle;
     MeshRenderer circleMesh;
+    public MouseLook DesktopCamera;
 
     float angle;
     float secondDistance;
@@ -92,6 +93,8 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         pole.transform.position = homePoint;
         targetCircle.transform.position = new Vector3(homePoint.x,-1.09f ,homePoint.z);
         targetCircleVisibility(true);
+
+        DesktopCamera.cameraTilt = true;
         
         yield return new WaitForSeconds(0.5f);
         float distanceError = Mathf.Round((homePoint - PlayerMovement.Instance.getPlayerPosition()).magnitude*100)/100;
@@ -99,6 +102,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         addReward(distanceError);
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
 
+        DesktopCamera.cameraTilt = false;
         targetCircleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
         triangleRunning = false;

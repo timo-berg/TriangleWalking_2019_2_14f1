@@ -21,7 +21,12 @@ public class ExperimentManager : Singleton<ExperimentManager>
     MeshRenderer short2Mesh;
     MeshRenderer long1Mesh;
     MeshRenderer long2Mesh;
-    
+
+    Collider short1Coll;
+    Collider short2Coll;
+    Collider long1Coll;
+    Collider long2Coll;
+
     public bool isVR;
 
     public int participantID = 0;
@@ -59,6 +64,11 @@ public class ExperimentManager : Singleton<ExperimentManager>
         short2Mesh = Short2.GetComponent<MeshRenderer>();
         long1Mesh = Long1.GetComponent<MeshRenderer>();
         long2Mesh = Long2.GetComponent<MeshRenderer>();
+
+        short1Coll = Short1.GetComponent<Collider>();
+        short2Coll = Short2.GetComponent<Collider>();
+        long1Coll  = Long1.GetComponent<Collider>();
+        long2Coll  = Long2.GetComponent<Collider>();
 
     }
 
@@ -111,23 +121,31 @@ public class ExperimentManager : Singleton<ExperimentManager>
     }
 
     void playerOutOfBounds() {
-        //Shows the room walls if the VR player is to close (0.2m) to them
-        Vector3 position = PlayerMovement.Instance.getPlayerPosition();
         if (isVR) {
-            if (position.x < -2.5f ||
-                position.x > 3.5f ||
-                position.z < -5f ||
-                position.z > 8f) {
-                    short1Mesh.enabled = true;
-                    short2Mesh.enabled = true;
-                    long1Mesh.enabled = true;
-                    long2Mesh.enabled = true;
-                } else {
-                    short1Mesh.enabled = false;
-                    short2Mesh.enabled = false;
-                    long1Mesh.enabled = false;
-                    long2Mesh.enabled = false;
-                }
+        Vector3 position = PlayerMovement.Instance.getPlayerPosition();
+
+        float minDist = Mathf.Min(Vector3.Distance(short1Coll.ClosestPointOnBounds(position), position),
+                                  Vector3.Distance(short2Coll.ClosestPointOnBounds(position), position),
+                                  Vector3.Distance(long1Coll.ClosestPointOnBounds(position), position),
+                                  Vector3.Distance(long2Coll.ClosestPointOnBounds(position), position)) - 0.5f;
+
+        if (minDist > 1f) {
+            short1Mesh.enabled = false;
+            short2Mesh.enabled = false;
+            long1Mesh.enabled = false;
+            long2Mesh.enabled = false;
+        } else {
+            short1Mesh.enabled = true;
+            short2Mesh.enabled = true;
+            long1Mesh.enabled = true;
+            long2Mesh.enabled = true;
+
+            short1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short1Coll.ClosestPointOnBounds(position), position)-0.5f));
+            short2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short2Coll.ClosestPointOnBounds(position), position) - 0.5f));
+            long1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long1Coll.ClosestPointOnBounds(position), position) - 0.5f));
+            long2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long2Coll.ClosestPointOnBounds(position), position) - 0.5f));
+        }
+
         }
     }
 }

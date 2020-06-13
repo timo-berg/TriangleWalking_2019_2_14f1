@@ -31,8 +31,8 @@ public class SphereMovement : Singleton<SphereMovement>
 
     protected override void Awake() {
         base.Awake();
-        angularSpeed = 15f;
-        translationSpeed = 0.6f; //0.3f;
+        angularSpeed = ConfigValues.angularSpeed;
+        translationSpeed = ConfigValues.translationSpeed;
     }
 
     void Start() {

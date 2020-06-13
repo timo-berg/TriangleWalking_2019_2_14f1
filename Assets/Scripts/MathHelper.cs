@@ -93,4 +93,9 @@ public static class MathHelper
         }
     }
 
+    public static float wallFadeSigmoid(float distance) {
+            return 1 / (1 + Mathf.Exp(5 * (distance - 1f)));
+        
+    }
+
 }
