@@ -121,15 +121,16 @@ public class ExperimentManager : Singleton<ExperimentManager>
     }
 
     void playerOutOfBounds() {
-        if (isVR) {
+        if (isVR || !isVR) {
         Vector3 position = PlayerMovement.Instance.getPlayerPosition();
 
-        float minDist = Mathf.Min(Vector3.Distance(short1Coll.ClosestPointOnBounds(position), position),
-                                  Vector3.Distance(short2Coll.ClosestPointOnBounds(position), position),
-                                  Vector3.Distance(long1Coll.ClosestPointOnBounds(position), position),
-                                  Vector3.Distance(long2Coll.ClosestPointOnBounds(position), position)) - 0.5f;
+        float minDist = Mathf.Min(Vector3.Distance(short1Coll.ClosestPoint(position), position),
+                                  Vector3.Distance(short2Coll.ClosestPoint(position), position),
+                                  Vector3.Distance(long1Coll.ClosestPoint(position), position),
+                                  Vector3.Distance(long2Coll.ClosestPoint(position), position)) - 0.5f;
 
-        if (minDist > 1f) {
+
+        if (minDist > 0.5f) {
             short1Mesh.enabled = false;
             short2Mesh.enabled = false;
             long1Mesh.enabled = false;
@@ -140,10 +141,10 @@ public class ExperimentManager : Singleton<ExperimentManager>
             long1Mesh.enabled = true;
             long2Mesh.enabled = true;
 
-            short1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short1Coll.ClosestPointOnBounds(position), position)-0.5f));
-            short2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short2Coll.ClosestPointOnBounds(position), position) - 0.5f));
-            long1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long1Coll.ClosestPointOnBounds(position), position) - 0.5f));
-            long2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long2Coll.ClosestPointOnBounds(position), position) - 0.5f));
+            short1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short1Coll.ClosestPoint(position), position)-0.5f));
+            short2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(short2Coll.ClosestPoint(position), position) - 0.5f));
+            long1Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long1Coll.ClosestPoint(position), position) - 0.5f));
+            long2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long2Coll.ClosestPoint(position), position) - 0.5f));
         }
 
         }
