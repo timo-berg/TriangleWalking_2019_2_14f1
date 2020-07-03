@@ -8,19 +8,18 @@ public class PlayerMovement : Singleton<PlayerMovement>
     public CharacterController movementController;
     public GameObject pointingController;
     public GameObject VRCamera;
-    float speed;
+    public float translationSpeed;
     public bool isMovementLocked = false;
     float z;
     float scaleFactor;
     Vector3 move;
 
     void Start() {
-        speed = ConfigValues.translationSpeed;
+        translationSpeed = ConfigValues.translationSpeedSlow;
     }
 
     void Update()
     {
-
         if (isMovementLocked == false) {
             //float x = Input.GetAxis("Horizontal");
             
@@ -33,7 +32,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 scaleFactor = Mathf.Clamp(scaleFactor * 1.01f, 1f, 3f);
             }
 
-            move = move * speed * scaleFactor * Time.deltaTime; // 
+            move = move * translationSpeed * scaleFactor * Time.deltaTime; // 
 
             movementController.Move(move);
         }

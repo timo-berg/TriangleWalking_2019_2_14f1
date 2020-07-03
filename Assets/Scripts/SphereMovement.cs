@@ -17,7 +17,7 @@ public class SphereMovement : Singleton<SphereMovement>
     bool isTranslating = false;
     float remainingDistance = 0f;
     float totalDistance;
-    public float translationSpeed { get; private set; }
+    public float translationSpeed;
     Vector3 translationDirection;
     public float translationScalingFactor;
 
@@ -32,7 +32,7 @@ public class SphereMovement : Singleton<SphereMovement>
     protected override void Awake() {
         base.Awake();
         angularSpeed = ConfigValues.angularSpeed;
-        translationSpeed = ConfigValues.translationSpeed;
+        translationSpeed = ConfigValues.translationSpeedSlow;
     }
 
     void Start() {

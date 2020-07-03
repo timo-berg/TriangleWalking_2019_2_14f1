@@ -19,8 +19,8 @@ public static class MathHelper
     }
 
     public static Vector3 generateRandomWaypoint() {        
-        float xPosition = Random.Range(-2.5f, 3.5f);  
-        float zPosition = Random.Range(-5f, 8f);       
+        float xPosition = Random.Range(-1.5f, 2.5f);  
+        float zPosition = Random.Range(-4f, 7f);       
 
         Vector3 randomWaypoint = new Vector3(xPosition, 0f, zPosition);
 
@@ -96,6 +96,11 @@ public static class MathHelper
     public static float wallFadeSigmoid(float distance) {
             return 1 / (1 + Mathf.Exp(10 * (distance - 0.25f)));
         
+    }
+
+    public static bool getRandomBoolean()
+    {
+        return (Random.value > 0.5f);
     }
 
 }

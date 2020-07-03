@@ -33,6 +33,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     public float participantHeight;
 
     public int reward;
+    public float translationSpeed;
     
     protected override void Awake() {
         base.Awake();
@@ -42,6 +43,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     void Start() {
         participantHeight = 1.5f;
         reward = 0;
+        translationSpeed = ConfigValues.translationSpeedSlow;
         //sphere.transform.Translate(0f, participantHeight - 0.2f, 0f, Space.World);
         
         //UnityEngine.XR.XRSettings.enabled = true;
@@ -121,7 +123,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     }
 
     void playerOutOfBounds() {
-        if (isVR || !isVR) {
+        if (isVR) {
         Vector3 position = PlayerMovement.Instance.getPlayerPosition();
 
         float minDist = Mathf.Min(Vector3.Distance(short1Coll.ClosestPoint(position), position),
@@ -147,6 +149,11 @@ public class ExperimentManager : Singleton<ExperimentManager>
             long2Mesh.material.color = new Color(1, 0, 0, MathHelper.wallFadeSigmoid(Vector3.Distance(long2Coll.ClosestPoint(position), position) - 0.5f));
         }
 
+        } else {
+            short1Mesh.enabled = false;
+            short2Mesh.enabled = false;
+            long1Mesh.enabled = false;
+            long2Mesh.enabled = false;
         }
     }
 }

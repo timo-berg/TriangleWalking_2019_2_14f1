@@ -5,7 +5,7 @@ using Valve.VR;
 
 public class TaskManager :  Singleton<TaskManager>
 {
-    //public GameObject controller;
+    bool isFast;
 
     // Start is called before the first frame update
     void Start()
@@ -57,10 +57,12 @@ public class TaskManager :  Singleton<TaskManager>
     }
 
     IEnumerator triangleTask(int trial) {
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0}", trial));
+        isFast = MathHelper.getRandomBoolean();
+        
+        ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1}", trial, isFast));
         //Start triangle
         yield return StartCoroutine(message("Aufgabe! \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
-        NewTriangleTask.Instance.initiateTriangle(trial);
+        NewTriangleTask.Instance.initiateTriangle(trial, isFast);
         //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
         yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));

@@ -29,11 +29,21 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         
     }
 
-    public void initiateTriangle(int runCounter) {
+    public void initiateTriangle(int runCounter, bool isFast) {
         //Initiates the triangle task. The triangle is determined by the angle alone.
 
         triangleRunning = true;
         
+        if (isFast) {
+            PlayerMovement.Instance.translationSpeed = ConfigValues.translationSpeedFast;
+            SphereMovement.Instance.translationSpeed = ConfigValues.translationSpeedFast;
+        } else {
+            PlayerMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
+            SphereMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
+        }
+
+        
+
         //Get and calculate the triangle parameters
         angle = ConfigValues.anglePermutation[ExperimentManager.Instance.participantID, runCounter];
         homePoint = MathHelper.getHomePoint(angle);
@@ -106,6 +116,8 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         targetCircleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
         triangleRunning = false;
+        PlayerMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
+        SphereMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
     }
 
     IEnumerator subtaskFinish() {

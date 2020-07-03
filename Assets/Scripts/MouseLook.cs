@@ -33,6 +33,8 @@ public class MouseLook : MonoBehaviour
             yRotation = Mathf.Clamp(yRotation, 0f, 45f);
 
             transform.localRotation = Quaternion.Euler(yRotation, 0f, 0f);
+        } else {
+            transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
         }
 
         if (isCameraLocked == false) {    
@@ -46,6 +48,7 @@ public class MouseLook : MonoBehaviour
             }
 
             playerBody.Rotate(Vector3.up * x * rotationSpeed * scaleFactor * Time.deltaTime, Space.World);  // 
+            
         }
 
 

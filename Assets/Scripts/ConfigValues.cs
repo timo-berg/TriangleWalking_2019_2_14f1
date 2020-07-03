@@ -39,7 +39,8 @@ public static class ConfigValues
 
     public static float angularSpeed = 15f;
 
-    public static float translationSpeed = 0.6f;
+    public static float translationSpeedSlow = 0.6f;
+    public static float translationSpeedFast = 0.8f;
     /*
     
 
