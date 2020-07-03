@@ -729,6 +729,18 @@ GameObject:
     type: 3}
   m_PrefabInstance: {fileID: 395893836}
   m_PrefabAsset: {fileID: 0}
+--- !u!4 &395893838 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 429506, guid: dc06161b6d97feb419f45f03b62e14b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 395893836}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &395893839 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 485514, guid: dc06161b6d97feb419f45f03b62e14b9,
+    type: 3}
+  m_PrefabInstance: {fileID: 395893836}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &457727188
 GameObject:
   m_ObjectHideFlags: 0
@@ -1354,7 +1366,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sampleSource: {fileID: 1230705098}
-  StreamName: PlayerTransform
+  StreamName: DesktopPlayerTransform
 --- !u!114 &921717040
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1383,6 +1395,48 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sampleSource: {fileID: 1004045958}
   StreamName: RightFootTransform
+--- !u!114 &921717042
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921717036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801a1b31b8e4fb748be9739910663f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSource: {fileID: 395893839}
+  StreamName: HandTransform
+--- !u!114 &921717043
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921717036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801a1b31b8e4fb748be9739910663f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSource: {fileID: 0}
+  StreamName: RigidBodyStream
+--- !u!114 &921717044
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 921717036}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 801a1b31b8e4fb748be9739910663f1c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sampleSource: {fileID: 395893838}
+  StreamName: VRPlayerTransform
 --- !u!1 &958412051 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: b7b6d3f521a7f8247896b9c2966aed55,
@@ -1653,6 +1707,7 @@ MonoBehaviour:
   movementController: {fileID: 1230705097}
   pointingController: {fileID: 1716594696}
   VRCamera: {fileID: 395893837}
+  translationSpeed: 0
   isMovementLocked: 0
 --- !u!1001 &1281424328
 PrefabInstance:
@@ -2722,6 +2777,7 @@ MonoBehaviour:
   participantID: 0
   participantHeight: 1.7
   reward: 0
+  translationSpeed: 0
 --- !u!1 &1945453193
 GameObject:
   m_ObjectHideFlags: 0
@@ -2754,6 +2810,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rotationScalingFactor: 0
+  translationSpeed: 0
   translationScalingFactor: 0
   isBaseline: 0
 --- !u!23 &1945453195
