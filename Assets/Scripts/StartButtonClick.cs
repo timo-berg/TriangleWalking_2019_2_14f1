@@ -9,7 +9,7 @@ using UnityEngine.VR;
 public class StartButtonClick : Singleton<StartButtonClick>
 {
     public string ID;
-    public string height;
+    public string trial;
     public bool isVR;
     
     // Start is called before the first frame update
@@ -32,8 +32,8 @@ public class StartButtonClick : Singleton<StartButtonClick>
     public void LoadExperiment() {
         TMP_InputField IDInput = GameObject.Find("IDInput").GetComponent<TMP_InputField>();
         ID = IDInput.text;
-        TMP_InputField HeightInput = GameObject.Find("HeightInput").GetComponent<TMP_InputField>();
-        height = HeightInput.text;
+        TMP_InputField TrialInput = GameObject.Find("TrialInput").GetComponent<TMP_InputField>();
+        trial = TrialInput.text;
         GameObject startManager = GameObject.Find("Managers");
         DontDestroyOnLoad (startManager);
         SceneManager.LoadScene("MainExperiment");

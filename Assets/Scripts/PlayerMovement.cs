@@ -20,11 +20,10 @@ public class PlayerMovement : Singleton<PlayerMovement>
 
     void Update()
     {
-        if (isMovementLocked == false) {
-            //float x = Input.GetAxis("Horizontal");
-            
+        if (isMovementLocked == false) {           
             z = Input.GetAxis("Vertical");
-            move = Vector3.Scale(transform.forward, new Vector3(1,0,1)) * z; //transform.right * x + 
+            Debug.Log(z);
+            move = Vector3.Scale(transform.forward, new Vector3(1,0,1)) * z;
 
             if (SphereMovement.Instance.isSphereTranslating()) {
                 scaleFactor = SphereMovement.Instance.translationScalingFactor;
@@ -32,7 +31,7 @@ public class PlayerMovement : Singleton<PlayerMovement>
                 scaleFactor = Mathf.Clamp(scaleFactor * 1.01f, 1f, 3f);
             }
 
-            move = move * translationSpeed * scaleFactor * Time.deltaTime; // 
+            move = move * translationSpeed * scaleFactor * Time.deltaTime;
 
             movementController.Move(move);
         }

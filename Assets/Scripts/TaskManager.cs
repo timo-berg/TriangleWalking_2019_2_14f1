@@ -16,7 +16,7 @@ public class TaskManager :  Singleton<TaskManager>
             SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed));
         //marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
         //                                StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
-        StartCoroutine(taskQueue());
+        StartCoroutine(taskQueue(ExperimentManager.Instance.startTrial));
 
 
 
@@ -28,18 +28,25 @@ public class TaskManager :  Singleton<TaskManager>
         
     }
 
-    IEnumerator taskQueue() {
+    IEnumerator taskQueue(int startTrial) {
         //TEST
         Debug.Log(ExperimentManager.Instance.participantID);
 
-        //Welcome the player
-        yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
-        ExperimentManager.Instance.hideTrackers();
-        
-        yield return StartCoroutine(longBaseline(0));
-        yield return StartCoroutine(triangleTask(0));
+        //Skip the intro when experiment is continued from a later trial
+        if(startTrial == 0) {
+            //Welcome the player
+            yield return StartCoroutine(message("Herzlich Willkommen! \n Zum Start bitte klicken."));
+            ExperimentManager.Instance.hideTrackers();
+            
+            yield return StartCoroutine(longBaseline(0));
+            //Test trials
+            yield return StartCoroutine(triangleTask(22, true));
+            yield return StartCoroutine(interTrialBaseline(23));
+            yield return StartCoroutine(triangleTask(23, true));
+        }
 
-        for (int trial = 1; trial<24; trial++) {
+        //Real trials
+        for (int trial = startTrial; trial<24; trial++) {
             yield return StartCoroutine(interTrialBaseline(trial));
             yield return StartCoroutine(triangleTask(trial));
         }
@@ -56,12 +63,17 @@ public class TaskManager :  Singleton<TaskManager>
         HMDMessageManager.Instance.HideMessage();
     }
 
-    IEnumerator triangleTask(int trial) {
+    IEnumerator triangleTask(int trial, bool isTest=false) {
         isFast = MathHelper.getRandomBoolean();
         
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1}", trial, isFast));
         //Start triangle
-        yield return StartCoroutine(message("Aufgabe! \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
+        if(isTest) {
+            yield return StartCoroutine(message("Testaufgabe \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
+        } else {
+            yield return StartCoroutine(message(string.Format("Aufgabe Nr {0} \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!",trial+1)));
+        }
+        
         NewTriangleTask.Instance.initiateTriangle(trial, isFast);
         //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());

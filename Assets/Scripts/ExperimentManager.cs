@@ -30,6 +30,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
     public bool isVR;
 
     public int participantID = 0;
+    public int startTrial = 0;
     public float participantHeight;
 
     public int reward;
@@ -39,6 +40,7 @@ public class ExperimentManager : Singleton<ExperimentManager>
         base.Awake();
         isVR = StartButtonClick.Instance.isVR;
         participantID = int.Parse(StartButtonClick.Instance.ID);
+        startTrial = int.Parse(StartButtonClick.Instance.trial) - 1;
     }
     void Start() {
         participantHeight = 1.5f;
@@ -71,6 +73,13 @@ public class ExperimentManager : Singleton<ExperimentManager>
         short2Coll = Short2.GetComponent<Collider>();
         long1Coll  = Long1.GetComponent<Collider>();
         long2Coll  = Long2.GetComponent<Collider>();
+
+        if(!isVR) {
+            short1Coll.enabled = false;
+            short2Coll.enabled = false;
+            long1Coll.enabled = false;
+            long2Coll.enabled = false;
+        }
 
     }
 

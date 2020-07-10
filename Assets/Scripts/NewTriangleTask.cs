@@ -69,6 +69,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
         poleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
+        yield return new WaitForSeconds(0.5f);
 
         //Lead to first point
         ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));
@@ -125,7 +126,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
         yield return StartCoroutine(SphereMovement.Instance.breath());
         ExperimentManager.Instance.LogMarker("event:subtaskFinished");
-        yield return new WaitForSeconds(Random.Range(1f,2f));
+        yield return new WaitForSeconds(Random.Range(1f,1.25f));
     }
 
     public bool isTriangleRunning() {
