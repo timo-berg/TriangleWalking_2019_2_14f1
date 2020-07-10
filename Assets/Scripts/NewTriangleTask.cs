@@ -24,11 +24,6 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         circleMesh = targetCircle.GetComponent<MeshRenderer>();
     }
 
-    void Update()
-    {
-        
-    }
-
     public void initiateTriangle(int runCounter, bool isFast) {
         //Initiates the triangle task. The triangle is determined by the angle alone.
 
@@ -66,20 +61,20 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
 
         //Wait for player to find pole and confirm
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        ExperimentManager.Instance.LogMarker("event:triangleTaskPoleSpotted");
+        ExperimentManager.Instance.logMarker("event:triangleTaskPoleSpotted");
         poleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
         yield return new WaitForSeconds(0.5f);
 
         //Lead to first point
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));
         //Translate to first point
         SphereMovement.Instance.setSpherePosition(pole.transform.position + new Vector3(0f, 1f, 0f));
         SphereMovement.Instance.setTranslation(firstWaypoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Lead to second point
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskSecondpoint;waypoint:{0}",secondWaypoint));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskSecondpoint;waypoint:{0}",secondWaypoint));
         //Rotate towards second point
         //SphereMovement.Instance.setRotation(Mathf.Sign(angle)*(180 - Mathf.Abs(angle)), firstWaypoint);
         SphereMovement.Instance.setRotation(secondWaypoint);
@@ -87,20 +82,12 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Translate to second point
         SphereMovement.Instance.setTranslation(secondWaypoint);
         yield return StartCoroutine(subtaskFinish());
-
+        SphereMovement.Instance.toggleVisibility(false);
 
         //Homing task
-        //Calculate gaze direction
-        Vector3 gazeAgv= GazeAverage();
-        ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskStart;waypoint");
-        //Show arrow
-        SphereMovement.Instance.toggleVisibility(false);
-        yield return StartCoroutine(ArrowManager.Instance.homingVectorTask(gazeAgv, homePoint));
-        
-        //Homing task and performance check
-        yield return new WaitForSeconds(1f);
+        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskStart;waypoint");
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        ExperimentManager.Instance.LogMarker("event:triangleTaskHomingtaskLocationConfirmed;waypoint");
+        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskLocationConfirmed;waypoint");
         pole.transform.position = homePoint;
         targetCircle.transform.position = new Vector3(homePoint.x,-1.09f ,homePoint.z);
         targetCircleVisibility(true);
@@ -111,7 +98,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         float distanceError = Mathf.Round((homePoint - PlayerMovement.Instance.getPlayerPosition()).magnitude*100)/100;
         yield return StartCoroutine(TaskManager.Instance.message(string.Format("{0} m vom Ziel entfernt!", distanceError)));
         addReward(distanceError);
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
 
         DesktopCamera.cameraTilt = false;
         targetCircleVisibility(false);
@@ -125,7 +112,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Coroutine that checks and ends a subtask
         yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
         yield return StartCoroutine(SphereMovement.Instance.breath());
-        ExperimentManager.Instance.LogMarker("event:subtaskFinished");
+        ExperimentManager.Instance.logMarker("event:subtaskFinished");
         yield return new WaitForSeconds(Random.Range(1f,1.25f));
     }
 
@@ -152,23 +139,5 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         } else if (error < 5) {
             ExperimentManager.Instance.reward += 1;
         }
-    }
-
-    Vector3 GazeAverage()
-    {
-        List<Vector3> gazeArraylist = new List<Vector3>();
-        Vector3 gazeAvg = Vector3.zero;
-
-        for (float i = 0; i <= 1; i += Time.deltaTime){
-            gazeArraylist.Add(PlayerMovement.Instance.getPlayerGaze());
-        }
-
-        for (int i = 0; i < gazeArraylist.Count; i++) {
-            gazeAvg += gazeArraylist[i];
-        }
-
-        gazeAvg = (gazeAvg / gazeArraylist.Count);
-        gazeAvg.y = 0f;
-        return gazeAvg.normalized;
     }
 }

@@ -11,11 +11,9 @@ public class TaskManager :  Singleton<TaskManager>
     void Start()
     {
         //Push an initial marker with experiment values
-        ExperimentManager.Instance.LogMarker(string.Format(
+        ExperimentManager.Instance.logMarker(string.Format(
             "event:experimentStart;angularSpeed:{0};translationSpeed:{1}", 
             SphereMovement.Instance.angularSpeed, SphereMovement.Instance.translationSpeed));
-        //marker = string.Format("event:participantInformation;participantID:{0};participantHeight:{1}",
-        //                                StartButtonClick.Instance.ID, StartButtonClick.Instance.height);
         StartCoroutine(taskQueue(ExperimentManager.Instance.startTrial));
 
 
@@ -54,7 +52,7 @@ public class TaskManager :  Singleton<TaskManager>
         yield return StartCoroutine(longBaseline(0));
 
         yield return StartCoroutine(message(string.Format("Danke für die Teilnahme \n Sie haben {0} Punkte erreicht!", ExperimentManager.Instance.reward)));
-
+        ExperimentManager.Instance.logMarker(string.Format("event:experimentEnd;score:{0}", ExperimentManager.Instance.reward));
     }
 
     public IEnumerator message(string message) {
@@ -66,11 +64,12 @@ public class TaskManager :  Singleton<TaskManager>
     IEnumerator triangleTask(int trial, bool isTest=false) {
         isFast = MathHelper.getRandomBoolean();
         
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1}", trial, isFast));
         //Start triangle
         if(isTest) {
+            ExperimentManager.Instance.logMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1}", 99, isFast));
             yield return StartCoroutine(message("Testaufgabe \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
         } else {
+            ExperimentManager.Instance.logMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1}", trial, isFast));
             yield return StartCoroutine(message(string.Format("Aufgabe Nr {0} \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!",trial+1)));
         }
         
@@ -79,11 +78,11 @@ public class TaskManager :  Singleton<TaskManager>
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
         yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
 
-        ExperimentManager.Instance.LogMarker(string.Format("event:triangleEnd;trial{0}", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleEnd;trial{0}", trial));
     }
 
     IEnumerator interTrialBaseline(int trial) {
-        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineStart;trial:{0}", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineStart;trial:{0}", trial));
         //Start baseline
         yield return new WaitForSeconds(0.5f);
         yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
@@ -91,11 +90,11 @@ public class TaskManager :  Singleton<TaskManager>
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
 
-        ExperimentManager.Instance.LogMarker(string.Format("event:intertrialBaselineEnd;trial:{0}", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineEnd;trial:{0}", trial));
     }
 
     IEnumerator longBaseline(int trial) {
-        ExperimentManager.Instance.LogMarker(string.Format(
+        ExperimentManager.Instance.logMarker(string.Format(
             "event:longBaselineStart;trial:{0};numberWaypoints:{1}", 
             trial, ConfigValues.longBaselineWaypointNumber));
         //Start baseline
@@ -105,7 +104,7 @@ public class TaskManager :  Singleton<TaskManager>
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
         
-        ExperimentManager.Instance.LogMarker(string.Format("event:longBaselineEnd;trial:{0}", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:longBaselineEnd;trial:{0}", trial));
     }
 
     public bool getKeyDown() {
