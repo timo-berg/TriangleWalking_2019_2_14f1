@@ -74,7 +74,7 @@ public class SphereMovement : Singleton<SphereMovement>
             direction = "right";
         }
         
-        ExperimentManager.Instance.logMarker(string.Format("event:rotationStart;angle:{0}:direction:{1}", totalAngle,direction));
+        ExperimentManager.Instance.logMarker(string.Format("event:rotationStart;angle:{0}:direction:{1};", totalAngle,direction));
     }
 
     public void setTranslation(Vector3 targetPosition) {
@@ -87,7 +87,7 @@ public class SphereMovement : Singleton<SphereMovement>
         totalDistance = remainingDistance = translationVector.magnitude + ConfigValues.nearDistance;
         translationDirection = translationVector;
 
-        ExperimentManager.Instance.logMarker(string.Format("event:translationStart;distance:{0}", translationVector.magnitude));
+        ExperimentManager.Instance.logMarker(string.Format("event:translationStart;distance:{0};", translationVector.magnitude));
     }
 
     void translateSphere() {
@@ -106,7 +106,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Stop the translation if there is no remaining distance
         if (remainingDistance <= 0.1f) {
             isTranslating = false;
-            ExperimentManager.Instance.logMarker("event:translationStop");
+            ExperimentManager.Instance.logMarker("event:translationStop;");
         }
         
     }
@@ -127,7 +127,7 @@ public class SphereMovement : Singleton<SphereMovement>
         //Stop the rotation if there is no remaining angle
         if (Mathf.Abs(remainingAngle) <= 0.1f) {
             isRotating = false;
-            ExperimentManager.Instance.logMarker("event:rotationStop");
+            ExperimentManager.Instance.logMarker("event:rotationStop;");
         }      
     }
 

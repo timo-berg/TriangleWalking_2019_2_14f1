@@ -1409,20 +1409,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sampleSource: {fileID: 395893839}
   StreamName: HandTransform
---- !u!114 &921717043
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 921717036}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 801a1b31b8e4fb748be9739910663f1c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sampleSource: {fileID: 0}
-  StreamName: RigidBodyStream
 --- !u!114 &921717044
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2775,7 +2761,7 @@ MonoBehaviour:
   Long2: {fileID: 1911007051}
   isVR: 1
   participantID: 0
-  participantHeight: 1.7
+  startTrial: 0
   reward: 0
   translationSpeed: 0
 --- !u!1 &1945453193

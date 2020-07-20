@@ -57,26 +57,28 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         pole.transform.position = homePoint + (firstWaypoint - homePoint).normalized * 2f + new Vector3(0f, -1f, 0f);
         pole.transform.rotation = Quaternion.Euler(-90f, 0f, 
                                         Vector3.SignedAngle(Vector3.right, firstWaypoint - homePoint, Vector3.up));
+        ExperimentManager.Instance.logMarker("event:triangleTaskPoleVisible;");                                
         poleVisibility(true);
 
         //Wait for player to find pole and confirm
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        ExperimentManager.Instance.logMarker("event:triangleTaskPoleSpotted");
+        ExperimentManager.Instance.logMarker("event:triangleTaskPoleSpotted;");
         poleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
+        ExperimentManager.Instance.logMarker("event:miniBaselineStart;");
         yield return new WaitForSeconds(0.5f);
+        ExperimentManager.Instance.logMarker("event:miniBaselineStop;");
 
         //Lead to first point
-        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0}",firstWaypoint));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0};",firstWaypoint));
         //Translate to first point
         SphereMovement.Instance.setSpherePosition(pole.transform.position + new Vector3(0f, 1f, 0f));
         SphereMovement.Instance.setTranslation(firstWaypoint);
         yield return StartCoroutine(subtaskFinish());
 
         //Lead to second point
-        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskSecondpoint;waypoint:{0}",secondWaypoint));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskSecondpoint;waypoint:{0};",secondWaypoint));
         //Rotate towards second point
-        //SphereMovement.Instance.setRotation(Mathf.Sign(angle)*(180 - Mathf.Abs(angle)), firstWaypoint);
         SphereMovement.Instance.setRotation(secondWaypoint);
         yield return StartCoroutine(subtaskFinish());
         //Translate to second point
@@ -85,9 +87,9 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         SphereMovement.Instance.toggleVisibility(false);
 
         //Homing task
-        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskStart;waypoint");
+        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskStart;waypoint;");
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
-        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskLocationConfirmed;waypoint");
+        ExperimentManager.Instance.logMarker("event:triangleTaskHomingtaskLocationConfirmed;waypoint;");
         pole.transform.position = homePoint;
         targetCircle.transform.position = new Vector3(homePoint.x,-1.09f ,homePoint.z);
         targetCircleVisibility(true);
@@ -98,7 +100,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         float distanceError = Mathf.Round((homePoint - PlayerMovement.Instance.getPlayerPosition()).magnitude*100)/100;
         yield return StartCoroutine(TaskManager.Instance.message(string.Format("{0} m vom Ziel entfernt!", distanceError)));
         addReward(distanceError);
-        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0}",distanceError));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskHomingtaskDistanceerror;error:{0};",distanceError));
 
         DesktopCamera.cameraTilt = false;
         targetCircleVisibility(false);
@@ -107,13 +109,14 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         PlayerMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
         SphereMovement.Instance.translationSpeed = ConfigValues.translationSpeedSlow;
     }
-
     IEnumerator subtaskFinish() {
         //Coroutine that checks and ends a subtask
         yield return new WaitUntil(() => ExperimentManager.Instance.isTaskFinished());
+        ExperimentManager.Instance.logMarker("event:miniBaselineStart;");
         yield return StartCoroutine(SphereMovement.Instance.breath());
-        ExperimentManager.Instance.logMarker("event:subtaskFinished");
+        ExperimentManager.Instance.logMarker("event:subtaskFinished;");
         yield return new WaitForSeconds(Random.Range(1f,1.25f));
+        ExperimentManager.Instance.logMarker("event:miniBaselineStop;");
     }
 
     public bool isTriangleRunning() {
