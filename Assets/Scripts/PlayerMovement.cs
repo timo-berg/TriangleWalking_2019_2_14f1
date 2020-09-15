@@ -22,7 +22,6 @@ public class PlayerMovement : Singleton<PlayerMovement>
     {
         if (isMovementLocked == false) {           
             z = Input.GetAxis("Vertical");
-            Debug.Log(z);
             move = Vector3.Scale(transform.forward, new Vector3(1,0,1)) * z;
 
             if (SphereMovement.Instance.isSphereTranslating()) {

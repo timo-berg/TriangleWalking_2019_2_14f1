@@ -34,7 +34,7 @@ public class TaskManager :  Singleton<TaskManager>
             ExperimentManager.Instance.logMarker("event:experimentStart;");
             ExperimentManager.Instance.hideTrackers();
             
-            yield return StartCoroutine(longBaseline(0));
+            yield return StartCoroutine(longBaseline(22));
             //Test trials
             yield return StartCoroutine(triangleTask(22, true));
             yield return StartCoroutine(interTrialBaseline(23));

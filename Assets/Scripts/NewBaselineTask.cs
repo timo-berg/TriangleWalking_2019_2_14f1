@@ -23,7 +23,7 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         targetPoint = MathHelper.getHomePoint(
             ConfigValues.anglePermutation[ExperimentManager.Instance.participantID, 
             runCounter]);
-        
+
         //Set sphere for secure transit point sampling
         SphereMovement.Instance.setSpherePosition(
             PlayerMovement.Instance.getPlayerPosition() 
@@ -91,6 +91,9 @@ public class NewBaselineTask : Singleton<NewBaselineTask>
         targetPoint = MathHelper.getHomePoint(
             ConfigValues.anglePermutation[ExperimentManager.Instance.participantID, 
             runCounter]);
+
+        Debug.Log("Baseline home point" + targetPoint);
+        Debug.Log("Run count" + runCounter);
 
         numWaypoints = numBaselineWaypoints;
 

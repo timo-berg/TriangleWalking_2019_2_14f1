@@ -42,6 +42,11 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         //Get and calculate the triangle parameters
         angle = ConfigValues.anglePermutation[ExperimentManager.Instance.participantID, runCounter];
         homePoint = MathHelper.getHomePoint(angle);
+        
+        Debug.Log("Triangle home point");
+        Debug.Log(homePoint);
+        Debug.Log("Run count" + runCounter);
+
         if (angle < 0) {firstWaypoint = ConfigValues.anchorPoints[0];} else {firstWaypoint = ConfigValues.anchorPoints[1];}
         secondWaypoint = MathHelper.getSecondWaypoint(angle, 4f);
 
@@ -66,7 +71,7 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         poleVisibility(false);
         SphereMovement.Instance.toggleVisibility(true);
         ExperimentManager.Instance.logMarker("event:miniBaselineStart;");
-        yield return new WaitForSeconds(0.5f);
+        yield return new WaitForSeconds(1f);
         ExperimentManager.Instance.logMarker("event:miniBaselineStop;");
 
         //Lead to first point
