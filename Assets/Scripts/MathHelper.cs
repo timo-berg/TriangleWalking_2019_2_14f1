@@ -20,7 +20,8 @@ public static class MathHelper
 
     public static Vector3 generateRandomWaypoint() {        
         float xPosition = Random.Range(-1.5f, 2.5f);  
-        float zPosition = Random.Range(-4f, 7f);       
+        //Introduced a gap because of a bug when baseline points were too close to the entry points of the trials
+        float zPosition = Random.value > 0.5f ? Random.Range(-4f, -3f) : Random.Range(0f, 7f);       
 
         Vector3 randomWaypoint = new Vector3(xPosition, 0f, zPosition);
 
