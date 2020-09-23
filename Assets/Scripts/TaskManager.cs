@@ -65,7 +65,7 @@ public class TaskManager :  Singleton<TaskManager>
         //Start triangle
         if(isTest) {
             ExperimentManager.Instance.logMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1};isTest:{2};", 99, isFast, isTest));
-            yield return StartCoroutine(message("Testaufgabe \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!"));
+            yield return StartCoroutine(message("Testaufgabe \n Suchen sie den Marker und richten sich aus! \n Wenn Sie den Marker gefunden haben klicken Sie!"));
         } else {
             ExperimentManager.Instance.logMarker(string.Format("event:triangleStart;trial:{0};fastTrial:{1};;isTest:{2};", trial, isFast, isTest));
             yield return StartCoroutine(message(string.Format("Aufgabe Nr {0} \n Suchen sie den Marker und richten sich aus! \n Zum Fortfahren bitte klicken!",trial+1)));

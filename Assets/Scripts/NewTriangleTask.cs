@@ -137,15 +137,15 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
     }
     void addReward(float error) {
         if (error < 1) {
-            ExperimentManager.Instance.reward += 5;
+            ExperimentManager.Instance.reward += 10;
         } else if (error < 2) {
-            ExperimentManager.Instance.reward += 4;
+            ExperimentManager.Instance.reward += 8;
         } else if (error < 3) {
-            ExperimentManager.Instance.reward += 3;
+            ExperimentManager.Instance.reward += 6;
         } else if (error < 4) {
-            ExperimentManager.Instance.reward += 2;
+            ExperimentManager.Instance.reward += 4;
         } else if (error < 5) {
-            ExperimentManager.Instance.reward += 1;
+            ExperimentManager.Instance.reward += 2;
         }
     }
 }
