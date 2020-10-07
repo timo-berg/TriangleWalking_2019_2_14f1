@@ -74,7 +74,7 @@ public class TaskManager :  Singleton<TaskManager>
         NewTriangleTask.Instance.initiateTriangle(trial, isFast);
         //Wait for end
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
-        yield return StartCoroutine(message("Aufgabe geschafft! \n Zum Fortfahren bitte klicken!"));
+        yield return StartCoroutine(message(string.Format("Aufgabe geschafft! \n Sie haben {0} Punkte \n Zum Fortfahren bitte klicken!", ExperimentManager.Instance.reward)));
 
         ExperimentManager.Instance.logMarker(string.Format("event:triangleEnd;trial{0};", trial));
     }
