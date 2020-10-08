@@ -40,7 +40,7 @@ public class TaskManager :  Singleton<TaskManager>
             yield return StartCoroutine(interTrialBaseline(23));
             yield return StartCoroutine(triangleTask(23, true));
         }
-
+        ExperimentManager.Instance.hideTrackers();
         //Real trials
         for (int trial = startTrial; trial<24; trial++) {
             yield return StartCoroutine(interTrialBaseline(trial));
