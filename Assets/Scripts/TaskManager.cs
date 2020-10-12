@@ -37,7 +37,7 @@ public class TaskManager :  Singleton<TaskManager>
             yield return StartCoroutine(longBaseline(22));
             //Test trials
             yield return StartCoroutine(triangleTask(22, true));
-            yield return StartCoroutine(interTrialBaseline(23));
+            yield return StartCoroutine(interTrialBaseline(23, true));
             yield return StartCoroutine(triangleTask(23, true));
         }
 
@@ -50,7 +50,7 @@ public class TaskManager :  Singleton<TaskManager>
         yield return StartCoroutine(longBaseline(0));
 
         yield return StartCoroutine(message(string.Format("Danke für die Teilnahme \n Sie haben {0} Punkte erreicht!", ExperimentManager.Instance.reward)));
-        ExperimentManager.Instance.logMarker(string.Format("event:experimentEnd;score:{0};", ExperimentManager.Instance.reward));
+        ExperimentManager.Instance.logMarker(string.Format("event:experimentStop;score:{0};", ExperimentManager.Instance.reward));
     }
 
     public IEnumerator message(string message) {
@@ -76,19 +76,27 @@ public class TaskManager :  Singleton<TaskManager>
         yield return new WaitWhile(() =>  NewTriangleTask.Instance.isTriangleRunning());
         yield return StartCoroutine(message(string.Format("Aufgabe geschafft! \n Sie haben {0} Punkte \n Zum Fortfahren bitte klicken!", ExperimentManager.Instance.reward)));
 
-        ExperimentManager.Instance.logMarker(string.Format("event:triangleEnd;trial{0};", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:triangleStop;trial{0};", trial));
+
     }
 
-    IEnumerator interTrialBaseline(int trial) {
-        ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineStart;trial:{0};", trial));
+    IEnumerator interTrialBaseline(int trial, bool isTest = false) {
         //Start baseline
         yield return new WaitForSeconds(0.5f);
-        yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        
+        if(isTest) {
+            ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineStart;trial:{0};isTest:{1};", 99, isTest));
+            yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        } else {
+            ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineStart;trial:{0};isTest:{1};", trial, isTest));
+            yield return StartCoroutine(message("Desorientierung! \n Bitte suchen Sie dem Ball. \n Zum Fortfahren bitte klicken!"));
+        }
+        
         NewBaselineTask.Instance.initiateInterTrialBaseline(trial);
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
 
-        ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineEnd;trial:{0};", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:intertrialBaselineStop;trial:{0};", trial));
     }
 
     IEnumerator longBaseline(int trial) {
@@ -102,7 +110,7 @@ public class TaskManager :  Singleton<TaskManager>
         //Wait for end
         yield return new WaitWhile(() =>  NewBaselineTask.Instance.isBaselineRunning());
         
-        ExperimentManager.Instance.logMarker(string.Format("event:longBaselineEnd;trial:{0};", trial));
+        ExperimentManager.Instance.logMarker(string.Format("event:longBaselineStop;trial:{0};", trial));
     }
 
     public bool getKeyDown() {
