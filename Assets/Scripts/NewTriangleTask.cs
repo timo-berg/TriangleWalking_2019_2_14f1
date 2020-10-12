@@ -69,10 +69,10 @@ public class NewTriangleTask : Singleton<NewTriangleTask>
         yield return new WaitUntil(() => TaskManager.Instance.getKeyDown());
         ExperimentManager.Instance.logMarker("event:triangleTaskPoleSpotted;");
         poleVisibility(false);
-        SphereMovement.Instance.toggleVisibility(true);
         ExperimentManager.Instance.logMarker("event:miniBaselineStart;");
         yield return new WaitForSeconds(1f);
         ExperimentManager.Instance.logMarker("event:miniBaselineStop;");
+        SphereMovement.Instance.toggleVisibility(true);
 
         //Lead to first point
         ExperimentManager.Instance.logMarker(string.Format("event:triangleTaskFirstpoint;waypoint:{0};",firstWaypoint));
